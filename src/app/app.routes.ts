@@ -17,9 +17,13 @@ import { ListaDeseosComponent } from './components/user/lista-deseos/lista-deseo
 import { HistorialComprasComponent } from './components/user/historial-compras/historial-compras.component';
 import { EventosComponent } from './components/eventos/eventos.component';
 import { ComprasComponent } from './components/compras/compras.component';
+import { QuienesSomosComponent } from './quienes-somos/quienes-somos.component';
+import { ConntactenosComponent } from './conntactenos/conntactenos.component';
 
 
 export const routes: Routes = [
+   { path: 'contactenos', component: ConntactenosComponent },
+   { path: 'quienes-somos', component: QuienesSomosComponent },
    { path: '', component: InicioComponent },
    { path: 'login', component: LoginComponent },
    { path: 'registro', component: RegistroComponent },
