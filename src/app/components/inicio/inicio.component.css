@@ -1,9 +1,9 @@
 .hero-section {
   text-align: center;
   padding: 4rem 1rem;
-  background: linear-gradient(rgba(240, 214, 186, 0.7), rgba(233, 152, 106, 0.7)), 
+  background: linear-gradient(rgb(206, 206, 207), rgba(173, 173, 173, 0.7)), 
               url('/assets/images/hero-bg.jpg') center/cover;
-  color: rgb(76, 42, 42);
+  color: rgb(5, 5, 5);
 }
 
 .hero-section h1 {
@@ -53,7 +53,7 @@
 }
 
 .eventos-destacados h2 {
-  color: #666;
+  color: #131212;
   margin-bottom: 2rem;
 }
 
@@ -83,7 +83,7 @@
 }
 
 .event-subtitle {
-  color: #666;
+  color: #181818;
   font-size: 1.2rem;
   margin: 0;
 }
@@ -96,15 +96,15 @@
 }
 
 .disponible-badge {
-  background-color: #4CAF50;
-  color: rgb(26, 12, 12);
+  background-color: #1a237e;
+  color: rgb(245, 237, 237);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-size: 0.9rem;
 }
 
 .comprar-btn {
-  background-color: #1a237e;
+  background-color: #0b1155;
   color: white;
   border: none;
   padding: 0.5rem 1.5rem;
@@ -138,7 +138,7 @@
 }
 
 .control-btn:hover {
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(245, 226, 226, 0.925);
 }
 
 /* Para los botones de navegación circulares */

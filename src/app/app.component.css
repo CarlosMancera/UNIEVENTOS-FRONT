@@ -1,7 +1,7 @@
 /* Variables */
 :root {
-  --primary-color: #1a237e;
-  --secondary-color: #ffa500;
+  --primary-color: #ecedf8;
+  --secondary-color: #eceaf5;
   --text-light: #fff;
   --text-dark: #333;
   --background-light: #f8f8f8;
@@ -10,10 +10,8 @@
 
 /* Header Styles */
 .main-header {
-  background: linear-gradient(rgba(239, 227, 196, 0.7), rgba(250, 162, 54, 0.7));
-  background-color: #faebd7;
-  
-  
+  background: linear-gradient(rgba(17, 25, 134, 0.582), rgba(22, 11, 124, 0.7));
+  background-color: #130e5e;
   background-size: cover;
   background-position: center;
   padding: 1rem 0;
@@ -53,16 +51,16 @@
     flex-direction: column;
 
     h1 {
-      color: var(--text-light);
+      color: #fff !important; /* Asegura que el color sea blanco */
       margin: 0;
       font-size: 2.0rem;
-      font-style: Arial;
+      font-family: Arial, sans-serif;
       font-weight: bold;
       letter-spacing: 1px;
     }
 
     .slogan {
-      color: #302e2e;
+      color: #e0dada;
       font-size: 0.9rem;
       margin-top: 0.2rem;
     }
@@ -71,6 +69,7 @@
 
 .main-nav {
   ul {
+    color: #e0dada;
     display: flex;
     gap: 2rem;
     list-style: none;
@@ -106,10 +105,14 @@
       }
     }
 
+    li a {
+      color: var(--text-light);
+    }
+
     .cart-icon, .user-icon {
       a {
-        font-size: 1.2rem;
-        padding: 0.5rem;
+        font-size: 2rem;
+        padding: 1rem;
         border-radius: 50%;
         background: rgba(255, 255, 255, 0.1);
         
@@ -140,11 +143,11 @@
   .logo-section {
     .brand-text {
       h1 {
-        font-size: 1.4rem;
+        font-size: 2rem;
       }
 
       .slogan {
-        font-size: 0.8rem;
+        font-size: 1rem;
       }
     }
   }
