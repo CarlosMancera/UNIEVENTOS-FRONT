@@ -1,0 +1,66 @@
+<div class="content-section">
+    <h2>Gestiona los cupones de UNIEVENTOS</h2>
+    
+    <button class="create-btn" routerLink="/admin/crear-cupon">
+      + Crear Nuevo Cupón
+    </button>
+  
+    <table class="cupones-table">
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Descuento</th>
+          <th>Expiración</th>
+          <th>Tipo</th>
+          <th>Uso</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cupon of cupones">
+          <td>{{cupon.codigo}}</td>
+          <td>{{cupon.descuento}}</td>
+          <td>{{cupon.expiracion}}</td>
+          <td>{{cupon.tipo}}</td>
+          <td>{{cupon.uso}}</td>
+          <td>
+            <span class="status-badge" [class.activo]="cupon.estado === 'Activo'"
+                                     [class.inactivo]="cupon.estado === 'Inactivo'">
+              {{cupon.estado}}
+            </span>
+          </td>
+          <td class="actions">
+            <button (click)="editarCupon(cupon.codigo)" class="action-btn">
+              <img src="edit.png" alt="Editar">
+            </button>
+            <button (click)="eliminarCupon(cupon.codigo)" class="action-btn">
+              <img src="delete.png" alt="Eliminar">
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <h3>Historial de Uso de Cupones</h3>
+    <input type="text" placeholder="Buscar Cupón..." class="search-input">
+  
+    <table class="historial-table">
+      <thead>
+        <tr>
+          <th>Código de Cupón</th>
+          <th>Usuario</th>
+          <th>Fecha de Uso</th>
+          <th>Evento</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let historial of historialCupones">
+          <td>{{historial.codigo}}</td>
+          <td>{{historial.usuario}}</td>
+          <td>{{historial.fechaUso}}</td>
+          <td>{{historial.evento}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

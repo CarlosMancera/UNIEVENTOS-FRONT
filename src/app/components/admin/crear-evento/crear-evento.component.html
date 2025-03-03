@@ -1,0 +1,98 @@
+<div class="crear-evento-container">
+    <h2>Crear Evento</h2>
+  
+    <form [formGroup]="crearEventoForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        <div class="form-left">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" formControlName="nombre" placeholder="Nombre Evento">
+          </div>
+  
+          <div class="form-group">
+            <label>Artista</label>
+            <div class="search-input">
+              <input type="text" formControlName="artista" placeholder="Nombre Artista">
+              <button type="button" class="search-btn">🔍</button>
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label>Descripción</label>
+            <textarea formControlName="descripcion" placeholder="Breve descripción"></textarea>
+          </div>
+  
+          <div class="form-group">
+            <label>Fecha</label>
+            <input type="date" formControlName="fecha">
+          </div>
+  
+          <div class="form-group">
+            <label>Dirección</label>
+            <input type="text" formControlName="direccion" placeholder="dirección">
+          </div>
+  
+          <div class="form-group">
+            <label>Ciudad</label>
+            <select formControlName="ciudad">
+              <option value="">Seleccione una ciudad</option>
+              @for (ciudad of ciudades; track $index) {
+                <option [value]="ciudad">{{ciudad}}</option>
+              }
+            </select>
+          </div>
+  
+          <div class="form-group">
+            <label>Tipo</label>
+            <select formControlName="tipo">
+              <option value="">Seleccione un tipo</option>
+              @for (tipo of tiposDeEvento; track $index) {
+                <option [value]="tipo">{{tipo}}</option>
+              }
+            </select>
+          </div>
+        </div>
+  
+        <div class="form-right">
+          <div class="image-upload">
+            <h3>Imagen Portada</h3>
+            <div class="upload-area">
+              <input type="file" (change)="onFileChange($event, 'portada')" accept="image/*">
+              <button (click)="subirImagen('portada')" >Subir imagen</button>
+              <img src="{{crearEventoForm.get('imagenPortada')?.value}}" style="width: 200px;"/>
+            </div>
+          </div>
+  
+          <div class="image-upload">
+            <h3>Imagen Localidades</h3>
+            <div class="upload-area">
+              <input type="file" (change)="onFileChange($event, 'localidades')" accept="image/*">
+              <button (click)="subirImagen('localidades')" >Subir imagen</button>
+              <img src="{{crearEventoForm.get('imagenLocalidades')?.value}}" style="width: 200px;"/>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="localidades-section">
+        <h3>Localidades</h3>
+        <button type="button" class="add-btn" (click)="agregarLocalidad()">+ Añadir Localidad</button>
+  
+        <div formArrayName="localidades" class="localidades-list">
+          @for (localidad of localidades.controls; track $index) {
+            <div [formGroupName]="$index" class="localidad-item">
+              <input type="text" formControlName="nombre" placeholder="Nombre">
+              <input type="number" formControlName="precio" placeholder="Precio">
+              <input type="number" formControlName="capacidad" placeholder="Capacidad">
+              <button type="button" (click)="eliminarLocalidad($index)">✕</button>
+            </div>
+          }
+        </div>
+      </div>
+  
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" routerLink="/admin">Cancelar</button>
+        <button type="submit" class="submit-btn">Crear</button>
+      </div>
+    </form>
+  </div>

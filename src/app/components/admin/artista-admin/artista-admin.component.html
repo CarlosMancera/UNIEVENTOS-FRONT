@@ -1,0 +1,52 @@
+<div class="content-section">
+    <h2>Gestiona los Artistas en UNIEVENTOS</h2>
+    
+    <button class="create-btn" routerLink="/admin/crear-artista">
+      + Añadir nuevo Artista
+    </button>
+  
+    <div class="search-bar">
+      <input type="text" placeholder="Buscar artista...">
+    </div>
+  
+    <table class="artistas-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Género</th>
+          <th>Estado</th>
+          <th>Email</th>
+          <th>Teléfono</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let artista of artistas">
+          <td>{{artista.nombre}}</td>
+          <td>{{artista.genero}}</td>
+          <td>
+            <span class="status-badge" [class.disponible]="artista.estado === 'Disponible'"
+                                     [class.ocupado]="artista.estado === 'Ocupado'">
+              {{artista.estado}}
+            </span>
+          </td>
+          <td>{{artista.email}}</td>
+          <td>{{artista.telefono}}</td>
+          <td class="actions">
+            <button (click)="editarArtista(artista.nombre)" class="action-btn">
+              <img src="edit.png" alt="Editar">
+            </button>
+            <button (click)="eliminarArtista(artista.nombre)" class="action-btn">
+              <img src="delete.png" alt="Eliminar">
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div class="pagination">
+      <button class="pagination-btn">Anterior</button>
+      <span>Mostrando 1-5 de 95 artistas</span>
+      <button class="pagination-btn">Siguiente</button>
+    </div>
+  </div>

@@ -1,0 +1,37 @@
+<div class="form-container">
+    <h2>Añadir Nuevo Artista</h2>
+    <form (ngSubmit)="guardarArtista()">
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" [(ngModel)]="nuevoArtista.nombre" name="nombre" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="genero">Género</label>
+        <input type="text" id="genero" [(ngModel)]="nuevoArtista.genero" name="genero" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" [(ngModel)]="nuevoArtista.email" name="email" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="telefono">Teléfono</label>
+        <input type="tel" id="telefono" [(ngModel)]="nuevoArtista.telefono" name="telefono" required>
+      </div>
+  
+      <div class="form-group">
+        <label for="estado">Estado</label>
+        <select id="estado" [(ngModel)]="nuevoArtista.estado" name="estado">
+          <option value="Disponible">Disponible</option>
+          <option value="Ocupado">Ocupado</option>
+        </select>
+      </div>
+  
+      <div class="button-group">
+        <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn-anadir">Añadir</button>
+      </div>
+    </form>
+  </div>

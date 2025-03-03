@@ -1,0 +1,159 @@
+.user-container {
+    width: 100%;
+    padding: 20px;
+    background-color: #f5f5f5;
+  }
+  
+  .user-nav {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: white;
+  }
+  
+  .nav-btn {
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    background-color: white;
+    cursor: pointer;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .nav-btn.active {
+    background-color: #e8f4e8;
+    border-color: #4CAF50;
+    color: #4CAF50;
+  }
+  
+  .content-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .content-section h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .create-btn {
+    background-color: #000;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .search-bar {
+    margin-bottom: 20px;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .events-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .events-table th {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 2px solid #ddd;
+    color: #666;
+  }
+  
+  .events-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .status-badge {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+  }
+  
+  .status-badge.terminado {
+    background-color: #e8f4e8;
+    color: #4CAF50;
+  }
+  
+  .status-badge.cancelado {
+    background-color: #ffebee;
+    color: #f44336;
+  }
+  
+  .status-badge.disponible {
+    background-color: #e8f4e8;
+    color: #4CAF50;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 5px;
+  }
+  
+  .action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .action-btn img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  
+  .pagination-btn {
+    padding: 8px 15px;
+    border: 1px solid #ccc;
+    background-color: white;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  /* Estilos para el header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .logo img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .logo-text {
+    color: #1565C0;
+    font-size: 24px;
+    font-weight: bold;
+  }

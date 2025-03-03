@@ -1,0 +1,16 @@
+<div class="user-container">
+    <nav class="user-nav">
+        <button class="nav-btn" [routerLink]="['/user/perfil']" routerLinkActive="active">
+            Perfil de Usuario
+        </button>
+        <button class="nav-btn" [routerLink]="['/user/historial']" routerLinkActive="active">
+            Historial de Compras
+        </button>
+        <button class="nav-btn" [routerLink]="['/user/lista-deseos']" routerLinkActive="active">
+            Lista Deseos
+        </button>
+        
+    </nav>
+  
+    <router-outlet></router-outlet>
+  </div>

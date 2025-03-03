@@ -1,0 +1,201 @@
+<div class="container py-4">
+  <div class="card mb-4">
+    <div class="card-header">
+      <h2>{{ selectedEvent.name }}</h2>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <!-- Detalles del Evento -->
+        <div class="col-md-4">
+          <div class="mb-4">
+            <img [src]="selectedEvent.image" [alt]="selectedEvent.band" class="img-fluid rounded">
+          </div>
+          <div>
+            <h3>Banda {{ selectedEvent.band }}</h3>
+            <p>{{ selectedEvent.description }}</p>
+            <p>Lugar: {{ selectedEvent.location }}</p>
+            <p>Fecha: {{ selectedEvent.date }}</p>
+          </div>
+          <!-- Selección de Localidad y Cantidad -->
+          <div class="mt-3">
+            <label for="locationSelect">Elegir Localidad</label>
+            <select id="locationSelect" formControlName="location" class="form-select">
+              <option *ngFor="let option of getLocationOptions()" [value]="option">
+                {{ option }} - {{ getLocationPrice(option) }}
+              </option>
+            </select>
+            <label for="quantitySelect" class="mt-3">Cantidad de entradas</label>
+            <div class="quantity-control">
+              <button class="btn btn-outline-secondary" (click)="updateQuantity(-1)">-</button>
+              <span class="mx-3">{{ bookingForm.get('quantity')?.value }}</span>
+              <button class="btn btn-outline-secondary" (click)="updateQuantity(1)">+</button>
+            </div>
+            <button class="btn btn-dark mt-3 w-100" (click)="addToCart()">Añadir al Carrito</button>
+          </div>
+        </div>
+
+        <!-- Distribución de Localidades -->
+        <div class="col-md-4">
+          <h3 class="mb-3">Distribución de localidades</h3>
+          <div class="seating-chart mb-3">
+            <img src="distribucion-localidades.jpg" alt="Distribución de localidades" class="img-fluid">
+          </div>
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Localidad</th>
+                <th>Disponible</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>VIP</td><td>30/200</td></tr>
+              <tr><td>Platea</td><td>80/300</td></tr>
+              <tr><td>General</td><td>150/300</td></tr>
+            </tbody>
+          </table>
+          <button class="btn btn-success w-100 mt-3">Ver más Eventos</button>
+        </div>
+
+        <!-- Carrito de Compras -->
+        <div class="col-md-4">
+currency          <div class="card">
+            <div class="card-header">Carrito de Compras</div>
+            <div class="card-body">
+              <div *ngFor="let item of cartItems" class="mb-2">
+                <strong>{{ item.event.name }}</strong> - {{ item.location }} x {{ item.quantity }}<br>
+                Subtotal: {{ item.subtotal | currency: 'COP' }}
+              </div>
+              <div class="border-top pt-3">
+                <div class="d-flex justify-content-between mb-2">
+                  <span>Subtotal:</span>
+                  <span>{{ getSubtotal() | currency: 'COP' }}</span>
+                </div>
+                <div *ngIf="isDiscountActive()" class="d-flex justify-content-between mb-2 text-success">
+                  <span>Descuento (20%):</span>
+                  <span>-{{ getDiscountAmount() | currency: 'COP' }}</span>
+                </div>
+                <div class="d-flex justify-content-between fw-bold">
+                  <span>Total:</span>
+                  <span>{{ calculateTotal() | currency: 'COP' }}</span>
+                </div>
+              </div>
+              <div class="input-group mt-3">
+                <input type="text" formControlName="promoCode" class="form-control" placeholder="Cupón de Descuento">
+                <button class="btn btn-primary" (click)="applyPromoCode()">Aplicar</button>
+              </div>
+              <button class="btn btn-success w-100 mt-3" (click)="openPaymentModal()">Generar Orden de Compra</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Pago -->
+<div *ngIf="showPaymentModal" class="modal fade show" tabindex="-1" style="display: block; background: rgba(0, 0, 0, 0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form [formGroup]="paymentForm" (ngSubmit)="verifyPurchase()">
+        <div class="modal-header">
+          <h5 class="modal-title">Orden de Compra</h5>
+          <button type="button" class="btn-close" (click)="closePaymentModal()"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Información detallada de tu compra</strong></p>
+          <p>{{ selectedEvent.name }} - Fecha del evento: {{ selectedEvent.date }}</p>
+          <p>Escoja el Método de pago</p>
+          <div class="d-flex justify-content-center mb-3">
+            <img src="visa.png" alt="Visa" class="img-thumbnail mx-1" 
+                 [class.selected]="selectedPaymentMethod === 'Visa'"
+                 (click)="selectPaymentMethod('Visa')" style="width: 50px; cursor: pointer;">
+            <img src="visa-electron.png" alt="Visa Electron" class="img-thumbnail mx-1" 
+                 [class.selected]="selectedPaymentMethod === 'Visa Electron'"
+                 (click)="selectPaymentMethod('Visa Electron')" style="width: 50px; cursor: pointer;">
+            <img src="mastercard.png" alt="MasterCard" class="img-thumbnail mx-1" 
+                 [class.selected]="selectedPaymentMethod === 'MasterCard'"
+                 (click)="selectPaymentMethod('MasterCard')" style="width: 50px; cursor: pointer;">
+            <img src="maestro.png" alt="Maestro" class="img-thumbnail mx-1" 
+                 [class.selected]="selectedPaymentMethod === 'Maestro'"
+                 (click)="selectPaymentMethod('Maestro')" style="width: 50px; cursor: pointer;">
+            <img src="transfer.png" alt="Pago por Transferencia" class="img-thumbnail mx-1" 
+                 [class.selected]="selectedPaymentMethod === 'Transferencia'"
+                 (click)="selectPaymentMethod('Transferencia')" style="width: 50px; cursor: pointer;">
+            <img src="paypal.png" alt="PayPal" class="img-thumbnail mx-1" 
+                 [class.selected]="selectedPaymentMethod === 'PayPal'"
+                 (click)="selectPaymentMethod('PayPal')" style="width: 50px; cursor: pointer;">
+          </div>
+          <div class="mb-3">
+            <label for="cardHolder" class="form-label">Nombre del titular</label>
+            <input id="cardHolder" type="text" formControlName="cardHolder" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="cardNumber" class="form-label">Número de tarjeta</label>
+            <input id="cardNumber" type="text" formControlName="cardNumber" class="form-control">
+            <div *ngIf="cardNumberError" class="payment-error">
+              El número de tarjeta debe tener 16 dígitos.
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <label for="expiryDate" class="form-label">Fecha de expiración</label>
+              <input id="expiryDate" type="text" formControlName="expiryDate" class="form-control" placeholder="MM/AA">
+            </div>
+            <div class="col">
+              <label for="cvv" class="form-label">Código de seguridad</label>
+              <input id="cvv" type="text" formControlName="cvv" class="form-control" placeholder="3 dígitos">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100 mt-3" [disabled]="!isPaymentFormValid()">Pagar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Verificación -->
+<div *ngIf="showVerificationModal" class="modal fade show" tabindex="-1" style="display: block; background: rgba(0, 0, 0, 0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Orden de Compra</h5>
+        <button type="button" class="btn-close" (click)="closeVerificationModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Información detallada de tu compra</strong></p>
+        <p>{{ selectedEvent.name }} - Fecha del evento: {{ selectedEvent.date }}</p>
+        
+        <p>Localidad: {{ bookingForm.get('location')?.value }}</p>
+        <p>Cantidad: {{ bookingForm.get('quantity')?.value }}</p>
+        <p>Precio Unitario: {{ getLocationPrice(bookingForm.get('location')?.value) }}</p>
+        <p>Descuento: -{{ getDiscountAmount() | currency: 'COP' }}</p>
+        <p><strong>Total:</strong> {{ calculateTotal() | currency: 'COP' }}</p>
+        <p>Método de pago: {{ selectedPaymentMethod }}</p>
+        
+        <p class="text-muted">Le hemos enviado a su e-mail un código de validación del pago</p>
+        
+        <div class="input-group mt-3">
+          <input type="text" formControlName="verificationCode" class="form-control" placeholder="Ingresar código">
+          <button class="btn btn-primary" (click)="confirmVerification()">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Éxito -->
+<div *ngIf="showSuccessModal" class="modal fade show" tabindex="-1" style="display: block; background: rgba(0, 0, 0, 0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content success-modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Su Pago ha sido Exitoso!!!</h5>
+        <button type="button" class="btn-close" (click)="closeSuccessModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p>Por realizar la compra te aplicamos un descuento del 20%.</p>
+        <p class="text-muted">Por favor revisa tu correo electrónico para más detalles.</p>
+        <button class="btn btn-dark" (click)="closeSuccessModal()">Salir</button>
+      </div>
+    </div>
+  </div>
+</div>

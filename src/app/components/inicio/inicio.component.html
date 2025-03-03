@@ -1,0 +1,69 @@
+<div class="hero-section">
+    <h1>Creamos Experiencias Inolvidables</h1>
+    <p>Organizamos los mejores conciertos y eventos musicales. Desde íntimos acústicos hasta grandes festivales.</p>
+    <div class="hero-buttons">
+      <button class="btn primary">Ver Próximos Eventos</button>
+      <button class="btn secondary">Contáctanos</button>
+    </div>
+  </div>
+  
+  <div class="eventos-destacados">
+    <h2>Eventos Destacados</h2>
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="event-content">
+                    <h3 class="event-title">Concierto de Rock</h3>
+                    <p class="event-subtitle">Banda Cura</p>
+                    <div class="event-buttons">
+                        <span class="disponible-badge">DISPONIBLE</span>
+                        <button class="buy-button" [routerLink]="['/compras']" routerLinkActive="active">Comprar Entradas</button>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item active">
+              <div class="event-content">
+                  <h3 class="event-title">Festival Jazz</h3>
+                  <p class="event-subtitle">Louis Armstrong</p>
+                  <div class="event-buttons">
+                      <span class="disponible-badge">DISPONIBLE</span>
+                      <button class="buy-button" [routerLink]="['/compras']" routerLinkActive="active">Comprar Entradas</button>
+                  </div>
+              </div>
+          </div>
+          <div class="carousel-item active">
+            <div class="event-content">
+                <h3 class="event-title">Comic-con</h3>
+                <p class="event-subtitle">Invitados Sorpresa</p>
+                <div class="event-buttons">
+                    <span class="disponible-badge">DISPONIBLE</span>
+                    <button class="buy-button" [routerLink]="['/compras']" routerLinkActive="active">Comprar Entradas</button>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-item active">
+          <div class="event-content">
+              <h3 class="event-title">Regocijo Espiritual</h3>
+              <p class="event-subtitle">Mediatando en el Akash</p>
+              <div class="event-buttons">
+                  <span class="disponible-badge">DISPONIBLE</span>
+                  <button class="buy-button" [routerLink]="['/compras']" routerLinkActive="active">Comprar Entradas</button>
+              </div>
+          </div>
+      </div>
+            <!-- Repite para más eventos -->
+        </div>
+        <div class="carousel-controls">
+            <button class="control-btn prev">Prev</button>
+            <button class="control-btn next">Next</button>
+        </div>
+    </div>
+</div>
+  <div class="social-container">
+    <span class="social-text">Síguenos</span>
+    <div class="social-icons">
+        <a href="#"><img src="facebook.png" alt="Facebook"></a>
+        <a href="#"><img src="twitter.png" alt="Twitter"></a>
+        <a href="#"><img src="instagram.png" alt="Instagram"></a>
+    </div>
+</div>

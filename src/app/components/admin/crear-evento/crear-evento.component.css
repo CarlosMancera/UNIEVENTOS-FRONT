@@ -1,0 +1,126 @@
+.crear-evento-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+.form-grid {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-left, .form-right {
+    width: 48%;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="number"],
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+textarea {
+    resize: vertical; /* Permitir redimensionar verticalmente */
+}
+
+.search-input {
+    display: flex;
+}
+
+.search-btn {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.search-btn:hover {
+    background-color: #0056b3; /* Color al pasar el mouse */
+}
+
+.image-upload {
+    margin-bottom: 20px;
+}
+
+.upload-area {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+}
+
+.upload-placeholder img {
+    width: 50px; /* Ajustar tamaño de imagen */
+}
+
+.localidades-section {
+    margin-top: 30px; 
+}
+
+.localidades-list {
+    margin-top: 10px; 
+}
+
+.localidad-item {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 10px; 
+}
+
+.localidad-item input[type="text"],
+.localidad-item input[type="number"] {
+    width: calc(33% - 10px); /* Ajustar ancho para tres campos */
+}
+
+.form-actions {
+    display: flex; 
+    justify-content: space-between; 
+}
+
+.cancel-btn,
+.submit-btn {
+    padding: 10px 15px; 
+    border-radius: 4px; 
+}
+
+.cancel-btn {
+    background-color: #f44336; 
+    color: white; 
+}
+
+.cancel-btn:hover {
+    background-color: #d32f2f; 
+}
+
+.submit-btn {
+    background-color: #4caf50; 
+    color: white; 
+}
+
+.submit-btn:hover {
+    background-color: #388e3c; 
+}

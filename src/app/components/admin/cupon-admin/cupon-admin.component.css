@@ -1,0 +1,95 @@
+.content-section {
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  h2, h3 {
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .create-btn {
+    background-color: #000;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+  
+  .create-btn:hover {
+    background-color: #333;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  /* Estilos para las tablas */
+  .cupones-table, .historial-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  th {
+    background-color: #f8f9fa;
+    padding: 12px;
+    text-align: left;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+  }
+  
+  td {
+    padding: 12px;
+    border-bottom: 1px solid #dee2e6;
+    color: #212529;
+  }
+  
+  /* Badges de estado */
+  .status-badge {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  
+  .status-badge.activo {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+  
+  .status-badge.inactivo {
+    background-color: #ffebee;
+    color: #c62828;
+  }
+  
+  /* Botones de acción */
+  .actions {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .action-btn:hover {
+    opacity: 0.8;
+  }
+  
+  .action-btn img {
+    width: 20px;
+    height: 20px;
+  }

@@ -1,0 +1,76 @@
+.content-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+    position: relative;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .form-group input:disabled {
+    background-color: #f5f5f5;
+  }
+  
+  .edit-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .edit-btn img {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .btn-editar, .btn-eliminar, .btn-guardar {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .btn-editar {
+    background-color: #2196F3;
+    color: white;
+  }
+  
+  .btn-eliminar {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .btn-guardar {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .btn-guardar:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
