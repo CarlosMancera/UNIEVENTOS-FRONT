@@ -8,7 +8,8 @@ import { Observable } from 'rxjs';
 })
 export class PublicoService {
 
-  private publicoURL = "http://localhost:8081/api/publico";
+  private publicoURL = "https://unieventosbackend-production.up.railway.app/api/publico";
+
 
   constructor(private http: HttpClient) { }
 

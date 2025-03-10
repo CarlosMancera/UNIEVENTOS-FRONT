@@ -14,10 +14,10 @@ import Swal from 'sweetalert2';
   styleUrls: ['./registro.component.css']
 })
 export class RegistroComponent {
-  
-  registroForm!: FormGroup;  
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder) { 
+  registroForm!: FormGroup;
+
+  constructor(private authService: AuthService, private formBuilder: FormBuilder) {
     this.crearFormulario();
   }
 
@@ -28,24 +28,24 @@ export class RegistroComponent {
       email: ['', [Validators.required, Validators.email]],
       direccion: ['', [Validators.required]],
       telefono: ['', [Validators.required, Validators.maxLength(10)]],
-      password: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]],
-      confirmaPassword: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]]
-    }, 
+      password: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(4)]],
+      confirmaPassword: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(4)]]
+    },
     { validators: this.passwordsMatchValidator } as AbstractControlOptions
   );
   }
 
   passwordsMatchValidator(formGroup: FormGroup) {
     const password = formGroup.get('password')?.value;
-    const confirmaPassword = formGroup.get('confirmaPassword')?.value;   
-   
+    const confirmaPassword = formGroup.get('confirmaPassword')?.value;
+
     // Si las contraseñas no coinciden, devuelve un error, de lo contrario, null
     return password === confirmaPassword ? null : { passwordsMismatch: true };
   }
-   
+
   public registrar() {
     const crearCuenta = this.registroForm.value as CrearCuentaDTO; // Cambiar a CrearCuentaDTO si ese es el correcto
-    
+
     this.authService.crearCuenta(crearCuenta).subscribe({
       next: (data) => {
         Swal.fire({

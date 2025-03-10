@@ -1,56 +1,80 @@
 <div class="login-container">
-    <div class="sidebar">
-      <nav>
-        <ul>
-          <li><a href="/eventos">Eventos</a></li>
-          <li><a href="/quienes-somos">Quienes Somos</a></li>
-          <li><a href="/contactenos">Contáctanos</a></li>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <nav>
+      <ul>
+        <li><a href="/eventos">Eventos</a></li>
+        <li><a href="/quienes-somos">Quienes Somos</a></li>
+        <li><a href="/contactenos">Contáctanos</a></li>
 
-            <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
-            <div class="social-icons">
-              <a href="#" class="facebook-icon"><img src="facebook.png" alt="Facebook"></a>
-              <a href="#" class="twitter-icon"><img src="twitter.png" alt="Twitter"></a>
-              <a href="#" class="instagram-icon"><img src="instagram.png" alt="Instagram"></a>
-            </div>
-         
-        </ul>
-      </nav>
-    </div>
-  
-    <div class="login-form">
-      <h2>Iniciar Sesión</h2>
-      <form (ngSubmit)="onSubmit()">
-        <div class="form-group">
-          <div class="input-icon">
-            <img src="email.png" alt="Email icon">
-            <input 
-              type="email" 
-              [(ngModel)]="loginData.email" 
-              name="email"
-              placeholder="Correo electronico"
-              required>
-          </div>
+        <div class="social-icons">
+          <a href="#" class="facebook-icon"><img src="facebook.png" alt="Facebook"></a>
+          <a href="#" class="twitter-icon"><img src="twitter.png" alt="Twitter"></a>
+          <a href="#" class="instagram-icon"><img src="instagram.png" alt="Instagram"></a>
         </div>
-  
-        <div class="form-group">
-          <div class="input-icon">
-            <img src="password.png" alt="Password icon">
-            <input 
-              type="password" 
-              [(ngModel)]="loginData.password" 
-              name="password"
-              placeholder="****************"
-              required>
-          </div>
-        </div>
-  
-        <button type="submit" class="login-button">Iniciar Sesión</button>
-  
-        <div class="form-links">
-          <a href="#" class="forgot-password">Olvido su contraseña?</a>
-          <p class="register-link">No tiene una cuenta? <a href="/registro">Regístrese</a></p>
-        </div>
-      </form>
-    </div>
+
+      </ul>
+    </nav>
   </div>
+
+  <!-- Formulario de inicio de sesión -->
+  <div class="login-form">
+    <h2>Iniciar Sesión</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <div class="input-icon">
+          <img src="email.png" alt="Email icon">
+          <input
+            type="email"
+            [(ngModel)]="loginData.email"
+            name="email"
+            placeholder="Correo electrónico"
+            required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="input-icon">
+          <img src="password.png" alt="Password icon">
+          <input
+            type="password"
+            [(ngModel)]="loginData.password"
+            name="password"
+            placeholder="****************"
+            required>
+        </div>
+      </div>
+
+      <button type="submit" class="login-button">Iniciar Sesión</button>
+
+      <div class="form-links">
+        <!-- Enlace para abrir el modal de recuperación de contraseña -->
+        <a class="forgot-password" (click)="openForgotPasswordModal(forgotPassword)">Olvidó su contraseña?</a>
+        <p class="register-link">No tiene una cuenta? <a href="/registro">Regístrese</a></p>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MODAL de Recuperación de Contraseña -->
+<ng-template #forgotPassword let-modal>
+<div class="modal-header">
+  <h5 class="modal-title">Recuperar Contraseña</h5>
+  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <p>Ingrese su correo electrónico para recibir un enlace de recuperación.</p>
+  <input type="correo" [(ngModel)]="correo" placeholder="Correo electrónico" class="form-control">
+  <div *ngIf="message" class="alert" [ngClass]="{'alert-success': success, 'alert-danger': !success}">
+    {{ message }}
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" (click)="sendRecoveryEmail()">Enviar</button>
+  <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">Cancelar</button>
+</div>
+</ng-template>

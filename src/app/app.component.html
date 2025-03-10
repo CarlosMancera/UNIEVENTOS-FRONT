@@ -1,17 +1,24 @@
 <header class="main-header">
   <div class="header-container">
+    <!-- Sección del logo -->
     <div class="logo-section">
-      <img src="https://tse1.mm.bing.net/th?id=OIP.5VI21pjoWXKZHXb-2TMHTgHaFz&pid=Api&P=0&h=180" alt="Unieventos Logo" class="logo">
+      <img src="https://tse1.mm.bing.net/th?id=OIP.5VI21pjoWXKZHXb-2TMHTgHaFz&pid=Api&P=0&h=180"
+           alt="Unieventos Logo"
+           class="logo">
       <div class="brand-text">
         <h1>UNIEVENTOS</h1>
         <span class="slogan">Creamos Experiencias</span>
       </div>
     </div>
-    <div class="menu-toggle" [class.active]="isMenuOpen" (click)="toggleMenu()">
+
+    <!-- Botón para desplegar el menú en dispositivos móviles -->
+    <div class="menu-toggle" [class.active]="isMenuOpen" (click)="toggleMenu($event)">
       <span></span>
       <span></span>
       <span></span>
     </div>
+
+    <!-- Navegación principal -->
     <nav class="main-nav" [class.active]="isMenuOpen">
       <ul>
         <li>
@@ -19,19 +26,47 @@
             <i class="fas fa-home"></i>
           </a>
         </li>
-        <li><a routerLink="/eventos" routerLinkActive="active">Eventos</a></li>
-        <li><a routerLink="/quienes-somos" routerLinkActive="active">Quienes Somos</a></li>
-        <li><a routerLink="/contactenos" routerLinkActive="active">contactenos</a></li>
+        <li>
+          <a routerLink="/eventos" routerLinkActive="active">Eventos</a>
+        </li>
+        <li>
+          <a routerLink="/quienes-somos" routerLinkActive="active">Quienes Somos</a>
+        </li>
+        <li>
+          <a routerLink="/contactenos" routerLinkActive="active">Contactenos</a>
+        </li>
         <li class="cart-icon">
           <a routerLink="/compras">
             <i class="fas fa-shopping-cart"></i>
           </a>
         </li>
-        <li class="user-icon">
-          <a routerLink="/login" routerLinkActive="active">
-            <i class="fas fa-user"></i>
-          </a>
-        </li>
+
+        <!-- Si NO hay sesión iniciada se muestra el ícono de usuario que lleva al login -->
+        <ng-container *ngIf="!authService.isLoggedIn()">
+          <li class="user-icon">
+            <a routerLink="/login" routerLinkActive="active">
+              <i class="fas fa-user"></i>
+            </a>
+          </li>
+        </ng-container>
+
+        <!-- Si hay sesión iniciada se muestra el dropdown del usuario -->
+        <ng-container *ngIf="authService.isLoggedIn()">
+          <li class="user-icon dropdown" (click)="toggleDropdown($event)">
+            <a href="javascript:void(0)">
+              <i class="fas fa-user"></i>
+              {{ authService.getCurrentUser()?.name }}
+            </a>
+            <ul class="dropdown-content" *ngIf="dropdownVisible">
+              <li>
+                <a routerLink="/user/perfil">Perfil</a>
+              </li>
+              <li>
+                <a (click)="logout($event)">Cerrar sesión</a>
+              </li>
+            </ul>
+          </li>
+        </ng-container>
       </ul>
     </nav>
   </div>
@@ -43,6 +78,6 @@
 
 <footer class="main-footer">
   <div class="footer-container">
-    <p>{{footer}}</p>
+    <p>{{ footer }}</p>
   </div>
 </footer>

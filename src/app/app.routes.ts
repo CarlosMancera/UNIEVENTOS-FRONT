@@ -19,12 +19,14 @@ import { EventosComponent } from './components/eventos/eventos.component';
 import { ComprasComponent } from './components/compras/compras.component';
 import { QuienesSomosComponent } from './quienes-somos/quienes-somos.component';
 import { ConntactenosComponent } from './conntactenos/conntactenos.component';
+import { ActualizarPasswordComponent } from './actualizar-password/actualizar-password.component';
 
 
 export const routes: Routes = [
    { path: 'contactenos', component: ConntactenosComponent },
    { path: 'quienes-somos', component: QuienesSomosComponent },
    { path: '', component: InicioComponent },
+   { path: 'actualizar-password', component: ActualizarPasswordComponent },
    { path: 'login', component: LoginComponent },
    { path: 'registro', component: RegistroComponent },
    { path: 'eventos', component: EventosComponent},
@@ -51,7 +53,7 @@ export const routes: Routes = [
          // Aquí irán las demás rutas para las otras pestañas
        ]
    },
-   
+
    { path: "**", pathMatch: "full", redirectTo: "" }
 ];
 

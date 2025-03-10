@@ -22,7 +22,8 @@ import { InformacionCuponDTO } from '../dto/cuponDTO/InformacionCuponDTO';
 })
 export class AdministradorService {
 
-  private adminURL = "http://localhost:8081/api/administrador";
+  private adminURL = "https://unieventosbackend-production.up.railway.app/api/administrador";
+
 
 
   constructor(private http: HttpClient) { }
