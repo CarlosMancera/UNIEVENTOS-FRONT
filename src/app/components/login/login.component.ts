@@ -32,15 +32,22 @@ export class LoginComponent {
   onSubmit() {
     this.authService.iniciarSesion(this.loginData).subscribe({
       next: (data) => {
-        console.log("Respuesta de iniciar sesión:", data);
+        if (data.error) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: data.respuesta || 'Error desconocido'
+          });
+          return;
+        }
+
         const token = data.respuesta.token;
         localStorage.setItem('token', token);
-        // Decodificamos el token para obtener el usuario
+
         const user = this.authService.decodeToken(token);
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.authService.checkAuthentication();
-        console.log("Usuario actual:", this.authService.getCurrentUser());
-        // Redirecciona según el rol
+
         if (user.role === 'admin') {
           this.router.navigate(['/admin']);
         } else {
@@ -48,15 +55,15 @@ export class LoginComponent {
         }
       },
       error: (error) => {
-        console.error("Error al iniciar sesión:", error);
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: error.error.respuesta || 'Credenciales inválidas'
+          text: error?.error?.respuesta || 'Error en la solicitud'
         });
       }
     });
   }
+
 
   openForgotPasswordModal(content: any) {
     this.modalService.open(content, { centered: true });

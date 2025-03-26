@@ -4,7 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { CrearCuentaDTO } from '../dto/cuentaDTO/CrearCuentaDTO';
 import { MensajeDTO } from '../dto/MensajeDTO';
 import { LoginDTO } from '../dto/LoginDTO';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
+import { ENDPOINTS } from '../core/endpoints';
+
 
 interface User {
   email: string;
@@ -12,57 +14,79 @@ interface User {
   role: 'user' | 'admin';
 }
 
-import { JwtPayload } from 'jwt-decode';
-
 interface MyJwtPayload extends JwtPayload {
   nombre?: string;
   rol?: string;
 }
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
-  private authURL = "https://unieventosbackend-production.up.railway.app/api/auth";
-  private authAuxURL = "https://unieventosbackend-production.up.railway.app/api/cuenta";  
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   public crearCuenta(cuentaDTO: CrearCuentaDTO): Observable<MensajeDTO> {
-    return this.http.post<MensajeDTO>(`${this.authAuxURL}/crear-cuenta`, cuentaDTO);
+    const url = `${ENDPOINTS.crearCuenta.baseUrl}/${ENDPOINTS.crearCuenta.path}`;
+    return this.http.post<MensajeDTO>(url, cuentaDTO);
   }
 
   public iniciarSesion(loginDTO: LoginDTO): Observable<MensajeDTO> {
-    return this.http.post<MensajeDTO>(`${this.authURL}/iniciar-sesion`, loginDTO);
+    const url = `${ENDPOINTS.iniciarSesion.baseUrl}/${ENDPOINTS.iniciarSesion.path}`;
+    return this.http.post<MensajeDTO>(url, loginDTO);
   }
 
   public recuperarPassword(correo: string): Observable<MensajeDTO> {
-    return this.http.post<MensajeDTO>(`${this.authAuxURL}/recuperar-password?correo=${correo}`, {});
+    const url = `${ENDPOINTS.recuperarPassword.baseUrl}/${ENDPOINTS.recuperarPassword.path}?correo=${correo}`;
+    return this.http.post<MensajeDTO>(url, {});
   }
 
-  // Método para decodificar el token y obtener la información del usuario
-  decodeToken(token: string): User {
+  public actualizarPassword(dto: any): Observable<MensajeDTO> {
+    const url = `${ENDPOINTS.iniciarSesion.baseUrl}/actualizar-password`;
+    return this.http.post<MensajeDTO>(url, dto);
+  }
+
+  public logout(): Observable<MensajeDTO> {
+    const email = this.getCurrentUser()?.email;
+
+    const url = `${ENDPOINTS.iniciarSesion.baseUrl}/close-sesion`;
+
+    if (email) {
+      return this.http.post<MensajeDTO>(url, email).pipe(
+        tap(() => {
+          this.currentUserSubject.next(null);
+          localStorage.removeItem('currentUser');
+          localStorage.removeItem('token');
+        })
+      );
+    } else {
+      this.currentUserSubject.next(null);
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('token');
+      return of({ error: false, mensaje: 'Cerró sesión correctamente', respuesta: null });
+    }
+  }
+
+  public decodeToken(token: string): User {
     const decoded = jwtDecode<MyJwtPayload>(token);
 
-    // Puedes validar que las propiedades existan
     if (!decoded.sub || !decoded.nombre || !decoded.rol) {
       throw new Error('Token inválido: faltan datos del usuario');
     }
 
     const user: User = {
-      email: decoded.sub,         // Se asume que 'sub' contiene el email
-      name: decoded.nombre,       // Ahora 'nombre' es reconocido en MyJwtPayload
-      role: decoded.rol === 'ADMIN' ? 'admin' : 'user'  // Mapea el rol según tu lógica
+      email: decoded.sub,
+      name: decoded.nombre,
+      role: decoded.rol === 'ADMIN' ? 'admin' : 'user',
     };
+
     return user;
   }
 
-  login(email: string, password: string): boolean {
-    // Este método se mantiene para pruebas locales, pero no se usará cuando se use el backend.
-    const user = this.users.find(u => u.email === email && u.password === password);
+  public login(email: string, password: string): boolean {
+    const user = this.users.find((u) => u.email === email && u.password === password);
     if (user) {
       const { password, ...userWithoutPassword } = user;
       this.currentUserSubject.next(userWithoutPassword);
@@ -72,52 +96,38 @@ export class AuthService {
     return false;
   }
 
-  logout(): Observable<MensajeDTO> {
-    const email = this.getCurrentUser()?.email;
-    if (email) {
-      return this.http.post<MensajeDTO>(`${this.authURL}/close-sesion`, email)
-        .pipe(
-          tap(response => {
-            this.currentUserSubject.next(null);
-            localStorage.removeItem('currentUser');
-            localStorage.removeItem('token');
-          })
-        );
-    } else {
-      this.currentUserSubject.next(null);
-      localStorage.removeItem('currentUser');
-      localStorage.removeItem('token');
-      return of({ error: false, mensaje: "Cerró sesión correctamente", respuesta: null });
-    }
-  }
-
-  getCurrentUser(): User | null {
+  public getCurrentUser(): User | null {
     return this.currentUserSubject.value;
   }
 
-  isLoggedIn(): boolean {
+  public isLoggedIn(): boolean {
     return !!this.currentUserSubject.value;
   }
 
-  checkAuthentication() {
+  public checkAuthentication(): void {
     const storedUser = localStorage.getItem('currentUser');
-    if (storedUser && storedUser !== "undefined") {
+    if (storedUser && storedUser !== 'undefined') {
       try {
         this.currentUserSubject.next(JSON.parse(storedUser));
       } catch (error) {
-        console.error("Error al parsear currentUser:", error);
+        console.error('Error al parsear currentUser:', error);
         localStorage.removeItem('currentUser');
       }
     }
   }
 
   private users = [
-    { email: 'user@email.com', password: 'useruser', name: 'Usuario Normal', role: 'user' as const },
-    { email: 'admin@email.com', password: 'adminadmin', name: 'Administrador', role: 'admin' as const }
+    {
+      email: 'user@email.com',
+      password: 'useruser',
+      name: 'Usuario Normal',
+      role: 'user' as const,
+    },
+    {
+      email: 'admin@email.com',
+      password: 'adminadmin',
+      name: 'Administrador',
+      role: 'admin' as const,
+    },
   ];
-
-  public actualizarPassword(dto: any): Observable<MensajeDTO> {
-    return this.http.post<MensajeDTO>(`${this.authURL}/actualizar-password`, dto);
-  }
-
 }
