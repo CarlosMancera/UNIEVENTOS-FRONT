@@ -55,7 +55,7 @@
           <li class="user-icon dropdown" (click)="toggleDropdown($event)">
             <a href="javascript:void(0)">
               <i class="fas fa-user"></i>
-              {{ authService.getCurrentUser()?.name }}
+              {{ usuarioNombre }}
             </a>
             <ul class="dropdown-content" *ngIf="dropdownVisible">
               <li>

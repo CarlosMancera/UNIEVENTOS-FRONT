@@ -110,24 +110,69 @@ export class HttpClientService {
   }
 
   private getHeaders(
-    headers?:
-      | HttpHeaders
-      | {
-          [header: string]: string | string[];
-        }
+    headers?: HttpHeaders | { [header: string]: string | string[] }
   ):
     | HttpHeaders
-    | {
-        [header: string]: string | string[];
-      } {
-    if (!headers) {
-      headers = new HttpHeaders();
+    | { [header: string]: string | string[] } {
+
+    let token = localStorage.getItem('token'); // O usa AuthService si prefieres
+
+    if (headers instanceof HttpHeaders) {
+      return token ? headers.set('Authorization', `Bearer ${token}`) : headers;
     }
 
-    // Aquí puedes añadir lógica para obtener token y meterlo en el header si es necesario
-    // Ejemplo:
-    // headers = headers.set('Authorization', `Bearer ${token}`);
-
-    return headers;
+    return {
+      ...headers,
+      Authorization: token ? `Bearer ${token}` : '',
+    };
   }
+
+  put<T>(
+    endpoint: Endpoint,
+    body: any | null,
+    pathParams?: Map<string, string>,
+    options?: {
+      headers?:
+        | HttpHeaders
+        | {
+            [header: string]: string | string[];
+          };
+      responseType?: "json";
+      params?: HttpParams | { [param: string]: string | string[] };
+      reportProgress?: boolean;
+    }
+  ): Observable<T> {
+    return this.handleErrors(
+      this.http.put<T>(
+        this.getUrl(endpoint, pathParams),
+        body,
+        this.getOptions(endpoint.authenticated, options)
+      )
+    );
+  }
+
+
+  delete<T>(
+    endpoint: Endpoint,
+    pathParams?: Map<string, string>,
+    options?: {
+      headers?:
+        | HttpHeaders
+        | {
+            [header: string]: string | string[];
+          };
+      responseType?: "json";
+      params?: HttpParams | { [param: string]: string | string[] };
+      reportProgress?: boolean;
+    }
+  ): Observable<T> {
+    return this.handleErrors(
+      this.http.delete<T>(
+        this.getUrl(endpoint, pathParams),
+        this.getOptions(endpoint.authenticated, options)
+      )
+    );
+  }
+
+
 }

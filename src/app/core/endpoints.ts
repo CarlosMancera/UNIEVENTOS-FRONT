@@ -18,4 +18,10 @@ export const ENDPOINTS = {
   // === URL_AUTH_AUX ===
   crearCuenta: new Endpoint(URL_AUTH_AUX, 'crear-cuenta', false),
   recuperarPassword: new Endpoint(URL_AUTH_AUX, 'recuperar-password', false),
+  recuperaInfoCuenta: new Endpoint(URL_AUTH_AUX, 'obtener-info-cuenta/{id}', false),
+  editarCuenta: new Endpoint(URL_AUTH_AUX, 'editar-perfil', true),
+  eliminarCuenta: new Endpoint(URL_AUTH_AUX, 'eliminar-cuenta/{id}', true)
+
+
+
 };

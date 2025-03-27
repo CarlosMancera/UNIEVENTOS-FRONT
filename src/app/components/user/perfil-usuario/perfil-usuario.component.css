@@ -1,76 +1,92 @@
 .content-section {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-    position: relative;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: #333;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-  }
-  
-  .form-group input:disabled {
-    background-color: #f5f5f5;
-  }
-  
-  .edit-btn {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .edit-btn img {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .button-group {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  .btn-editar, .btn-eliminar, .btn-guardar {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  
-  .btn-editar {
-    background-color: #2196F3;
-    color: white;
-  }
-  
-  .btn-eliminar {
-    background-color: #f44336;
-    color: white;
-  }
-  
-  .btn-guardar {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  .btn-guardar:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-  }
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.titulo {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.form-control {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  transition: border 0.3s ease;
+}
+
+.form-control:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+button {
+  flex: 1 1 calc(33.333% - 0.66rem);
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-editar {
+  background-color: #ffc107;
+}
+
+.btn-editar:hover {
+  background-color: #e0a800;
+}
+
+.btn-eliminar {
+  background-color: #dc3545;
+}
+
+.btn-eliminar:hover {
+  background-color: #c82333;
+}
+
+.btn-guardar {
+  background-color: #28a745;
+}
+
+.btn-guardar:hover {
+  background-color: #218838;
+}
+
+button:disabled {
+  background-color: #adb5bd;
+  cursor: not-allowed;
+}

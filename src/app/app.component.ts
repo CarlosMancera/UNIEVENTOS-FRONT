@@ -17,12 +17,18 @@ export class AppComponent implements OnInit {
   // Variable para controlar el dropdown del usuario
   dropdownVisible = false;
   footer = '© 2024 UNIEVENTOS - Todos los derechos reservados';
+  usuarioNombre = '';
 
   constructor(public authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
+    this.authService.currentUser$.subscribe((user) => {
+      this.usuarioNombre = user?.name ?? '';
+    });
+
     this.authService.checkAuthentication();
   }
+
 
   // Alterna el menú móvil y evita que el clic se propague
   toggleMenu(event: Event): void {
@@ -55,4 +61,6 @@ export class AppComponent implements OnInit {
     this.isMenuOpen = false;
     this.dropdownVisible = false;
   }
+
+
 }

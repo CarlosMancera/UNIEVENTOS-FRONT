@@ -111,10 +111,14 @@ export class AuthService {
         this.currentUserSubject.next(JSON.parse(storedUser));
       } catch (error) {
         console.error('Error al parsear currentUser:', error);
+        this.currentUserSubject.next(null);
         localStorage.removeItem('currentUser');
       }
+    } else {
+      this.currentUserSubject.next(null);
     }
   }
+
 
   private users = [
     {
@@ -130,4 +134,16 @@ export class AuthService {
       role: 'admin' as const,
     },
   ];
+
+  public getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  public getUserIdFromToken(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+    const decoded: any = jwtDecode(token);
+    return decoded?.id ?? null;
+  }
+
 }
