@@ -1,6 +1,6 @@
 [build]
   command = "npm install --legacy-peer-deps && npm run build -- --configuration=production"
-  publish = "dist/unieventos-front"
+  publish = "dist/unieventos-front/browser"
 
 [context.production.environment]
   NODE_VERSION = "18"
