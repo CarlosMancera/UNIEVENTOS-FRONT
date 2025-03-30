@@ -1,17 +1,24 @@
+// forgot-password-dialog.component.ts
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormsModule } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
+import { FormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-forgot-password-dialog',
   standalone: true,
   templateUrl: './forgot-password-dialog.component.html',
   styleUrls: ['./forgot-password-dialog.component.css'],
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatDialogModule,
+    MatButtonModule
+  ]
 })
 export class ForgotPasswordDialogComponent {
   correo: string = '';
@@ -21,31 +28,36 @@ export class ForgotPasswordDialogComponent {
   constructor(
     private dialogRef: MatDialogRef<ForgotPasswordDialogComponent>,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   sendRecoveryEmail() {
     if (!this.correo) {
-      Swal.fire('⚠️ Por favor, ingrese un correo electrónico válido.');
+      this.message = 'Por favor, ingrese un correo electrónico válido.';
+      this.success = false;
       return;
     }
 
     this.authService.recuperarPassword(this.correo).subscribe({
       next: () => {
-        Swal.fire('✅ Revisa tu correo para recuperar tu contraseña.').then(() => {
-          this.dialogRef.close();
-          this.router.navigate(['/actualizar-password'], { queryParams: { correo: this.correo } });
-        });
         this.success = true;
+        this.message = '✅ Revisa tu correo para recuperar tu contraseña.';
+        setTimeout(() => {
+          this.dialogRef.close();
+          this.router.navigate(['/actualizar-password'], {
+            queryParams: { correo: this.correo }
+          });
+        }, 2000);
       },
       error: () => {
-        Swal.fire('❌ Error al enviar el correo. Intente de nuevo.');
         this.success = false;
+        this.message = '❌ Error al enviar el correo. Intente de nuevo.';
       }
     });
   }
 
-  close() {
+  cancelar() {
     this.dialogRef.close();
   }
 }

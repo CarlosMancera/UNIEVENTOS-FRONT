@@ -1,5 +1,3 @@
-// Paso 1: login.component.ts
-
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,13 +6,18 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AuthService } from '../../services/auth.service';
 import { LoginDTO } from '../../dto/LoginDTO';
 import { TokenService } from '../../services/token.service';
-import Swal from 'sweetalert2';
 import { ForgotPasswordDialogComponent } from '../shared/forgot-password-dialog/forgot-password-dialog.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatDialogModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatDialogModule,
+    ForgotPasswordDialogComponent
+  ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -32,17 +35,12 @@ export class LoginComponent {
     this.authService.iniciarSesion(this.loginData).subscribe({
       next: (data) => {
         if (data.error) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: data.respuesta || 'Error desconocido'
-          });
+          Swal.fire('Error', data.respuesta || 'Error desconocido', 'error');
           return;
         }
 
         const token = data.respuesta.token;
         localStorage.setItem('token', token);
-
         const user = this.authService.decodeToken(token);
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.authService.checkAuthentication();
@@ -54,11 +52,7 @@ export class LoginComponent {
         }
       },
       error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: error?.error?.respuesta || 'Error en la solicitud'
-        });
+        Swal.fire('Error', error?.error?.respuesta || 'Error en la solicitud', 'error');
       }
     });
   }
