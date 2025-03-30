@@ -1,9 +1,6 @@
 [build]
-  command = "npm install --legacy-peer-deps && ng build --configuration=production"
+  command = "npm install --legacy-peer-deps && npm run build -- --configuration=production"
   publish = "dist/unieventos-front"
 
 [context.production.environment]
   NODE_VERSION = "18"
-
-[[plugins]]
-  package = "@netlify/plugin-local-install-core"
