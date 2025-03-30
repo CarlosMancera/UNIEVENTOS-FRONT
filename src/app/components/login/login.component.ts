@@ -9,7 +9,7 @@ import { AuthService } from '../../services/auth.service';
 import { LoginDTO } from '../../dto/LoginDTO';
 import { TokenService } from '../../services/token.service';
 import Swal from 'sweetalert2';
-import { ForgotPasswordDialogComponent } from './forgot-password-dialog.component';
+import { ForgotPasswordDialogComponent } from '../shared/forgot-password-dialog/forgot-password-dialog.component';
 
 @Component({
   selector: 'app-login',
