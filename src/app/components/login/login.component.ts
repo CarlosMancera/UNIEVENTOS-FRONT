@@ -1,32 +1,31 @@
-import { Component, ViewChild } from '@angular/core';
+// Paso 1: login.component.ts
+
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { NgbModal, NgbModalModule, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AuthService } from '../../services/auth.service';
 import { LoginDTO } from '../../dto/LoginDTO';
 import { TokenService } from '../../services/token.service';
 import Swal from 'sweetalert2';
+import { ForgotPasswordDialogComponent } from './forgot-password-dialog.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgbModalModule], // ✅ Importar NgbModalModule
+  imports: [CommonModule, FormsModule, MatDialogModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   loginData: LoginDTO = { email: '', password: '' };
-  correo: string = '';  // Almacena el correo del usuario para recuperación
-  message: string = '';
-  success: boolean = false;
-  modalRef!: NgbModalRef;
 
   constructor(
     private router: Router,
     private authService: AuthService,
     private tokenService: TokenService,
-    private modalService: NgbModal
+    private dialog: MatDialog
   ) {}
 
   onSubmit() {
@@ -64,32 +63,10 @@ export class LoginComponent {
     });
   }
 
-
-  openForgotPasswordModal(content: any) {
-    this.modalService.open(content, { centered: true });
-  }
-
-  sendRecoveryEmail() {
-    if (!this.correo) {
-      Swal.fire("⚠️ Por favor, ingrese un correo electrónico válido.");
-      return;
-    }
-
-    this.authService.recuperarPassword(this.correo).subscribe({
-      next: () => {
-        Swal.fire("✅ Revisa tu correo para recuperar tu contraseña.").then(() => {
-          // Cierra TODOS los modales abiertos
-          this.modalService.dismissAll();
-          // Redirige al componente para actualizar la contraseña
-          this.router.navigate(['/actualizar-password'], { queryParams: { correo: this.correo } });
-        });
-        this.success = true;
-      },
-      error: () => {
-        Swal.fire("❌ Error al enviar el correo. Intente de nuevo.");
-        this.success = false;
-      }
+  openForgotPasswordModal() {
+    this.dialog.open(ForgotPasswordDialogComponent, {
+      width: '400px',
+      disableClose: true
     });
   }
-
 }
