@@ -2,6 +2,7 @@ import { environment } from '../../environments/environment';
 
 const URL_AUTH = environment.urlAuth;
 const URL_AUTH_AUX = environment.urlAuthAux;
+const URL_BASE = environment.urlBase;
 
 export class Endpoint {
   constructor(
@@ -20,8 +21,14 @@ export const ENDPOINTS = {
   recuperarPassword: new Endpoint(URL_AUTH_AUX, 'recuperar-password', false),
   recuperaInfoCuenta: new Endpoint(URL_AUTH_AUX, 'obtener-info-cuenta/{id}', false),
   editarCuenta: new Endpoint(URL_AUTH_AUX, 'editar-perfil', true),
-  eliminarCuenta: new Endpoint(URL_AUTH_AUX, 'eliminar-cuenta/{id}', true)
+  eliminarCuenta: new Endpoint(URL_AUTH_AUX, 'eliminar-cuenta/{id}', true),
 
+  // === NUEVO ENDPOINT PARA ARTISTAS ===
+  crearArtista: new Endpoint(URL_BASE, 'api/administrador/crear-artista', true),
+  listarArtistas: new Endpoint(URL_BASE, 'api/administrador/listar-artista', true),
+  editarArtista: new Endpoint(URL_BASE, 'api/administrador/editar-artista', true),
+  eliminarArtista: new Endpoint(URL_BASE, 'api/administrador/eliminar-artista/{id}', true),
+  crearEvento: new Endpoint(URL_BASE, 'api/administrador/crear-evento', true),
 
 
 };

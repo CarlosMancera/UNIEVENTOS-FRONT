@@ -79,7 +79,7 @@ export class AuthService {
     const user: User = {
       email: decoded.sub,
       name: decoded.nombre,
-      role: decoded.rol === 'ADMIN' ? 'admin' : 'user',
+      role: decoded.rol === 'ADMINISTRADOR' ? 'admin' : 'user',
     };
 
     return user;
@@ -129,7 +129,7 @@ export class AuthService {
     },
     {
       email: 'admin@email.com',
-      password: 'adminadmin',
+      password: 'admin',
       name: 'Administrador',
       role: 'admin' as const,
     },

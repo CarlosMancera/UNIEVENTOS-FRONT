@@ -1,0 +1,36 @@
+<h2 mat-dialog-title class="dialog-title">Editar Artista</h2>
+
+<form (ngSubmit)="guardar()" class="edit-form" novalidate>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Nombre</mat-label>
+    <input matInput [(ngModel)]="artista.nombre" name="nombre" disabled />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Género</mat-label>
+    <input matInput [(ngModel)]="artista.genero" name="genero" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Email</mat-label>
+    <input matInput type="email" [(ngModel)]="artista.email" name="email" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Teléfono</mat-label>
+    <input matInput type="text" [(ngModel)]="artista.telefono" name="telefono" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Estado</mat-label>
+    <mat-select [(ngModel)]="artista.estado" name="estado">
+      <mat-option value="DISPONIBLE">Disponible</mat-option>
+      <mat-option value="ELIMINADO">Eliminado</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="modal-actions">
+    <button mat-raised-button color="primary" type="submit">Guardar</button>
+    <button mat-button type="button" (click)="cancelar()">Cancelar</button>
+  </div>
+</form>

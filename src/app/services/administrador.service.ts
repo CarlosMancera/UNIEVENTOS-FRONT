@@ -65,11 +65,11 @@ export class AdministradorService {
     return this.http.get<MensajeDTO>(`${this.adminURL}/buscar-evento/${nombre}`);
   }
 
-  
+
   public agregarImagenEvento(imagen: FormData): Observable<MensajeDTO> {
     return this.http.post<MensajeDTO>(`${this.adminURL}/agregar-imagen-evento`, imagen);
   }
- 
+
 
   public agregarImagenLocalidad(idEvento: string, nombreLocalidad: string, imagen: FormData): Observable<MensajeDTO> {
     return this.http.post<MensajeDTO>(`${this.adminURL}/agregar-imagen-localidad/${idEvento}/${nombreLocalidad}`, imagen);
@@ -137,7 +137,6 @@ export class AdministradorService {
     return this.http.get<MensajeDTO>(`${this.adminURL}/buscar-cupon/${codigo}`);
   }
 
-  // Métodos para imágenes
   public subirImagen(imagen: FormData): Observable<MensajeDTO> {
     return this.http.post<MensajeDTO>(`${this.adminURL}/subir-imagen`, imagen);
   }
@@ -145,5 +144,5 @@ export class AdministradorService {
   public eliminarImagen(nombreImagen: string): Observable<MensajeDTO> {
     return this.http.delete<MensajeDTO>(`${this.adminURL}/eliminar-imagen/${nombreImagen}`);
   }
- 
+
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, AbstractControlOptions } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CrearCuentaDTO } from '../../dto/cuentaDTO/CrearCuentaDTO';
 import Swal from 'sweetalert2';
@@ -17,7 +17,8 @@ export class RegistroComponent {
 
   registroForm!: FormGroup;
 
-  constructor(private authService: AuthService, private formBuilder: FormBuilder) {
+  constructor(private router: Router,
+  private authService: AuthService, private formBuilder: FormBuilder) {
     this.crearFormulario();
   }
 
@@ -54,6 +55,7 @@ export class RegistroComponent {
           icon: 'success',
           confirmButtonText: 'Aceptar'
         });
+        this.router.navigate(['/']);
       },
       error: (error) => {
         Swal.fire({

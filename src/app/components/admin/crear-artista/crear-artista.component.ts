@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HttpClientService } from '../../../services/HttpClientService.service';
+import { ENDPOINTS } from '../../../core/endpoints';
 
 @Component({
   selector: 'app-crear-artista',
@@ -12,20 +14,40 @@ import { Router } from '@angular/router';
 })
 export class CrearArtistaComponent {
   nuevoArtista = {
-    id: '',
     nombre: '',
     genero: '',
     email: '',
-    telefono: '',
-    estado: 'Disponible'
+    telefono: ''
   };
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private httpClientService: HttpClientService
+  ) {}
 
   guardarArtista() {
-    // Aquí iría la lógica para guardar el artista
-    console.log('Artista a guardar:', this.nuevoArtista);
-    this.router.navigate(['/admin/artistas']);
+    const body = {
+      nombre: this.nuevoArtista.nombre,
+      genero: this.nuevoArtista.genero,
+      email: this.nuevoArtista.email,
+      telefono: this.nuevoArtista.telefono
+    };
+
+    this.httpClientService.post<any>(ENDPOINTS.crearArtista, body).subscribe({
+      next: (data) => {
+        if (data?.error === true) {
+          alert('Error al crear el artista: ' + (data.mensaje || 'Error desconocido'));
+          return;
+        }
+
+        alert('Artista creado exitosamente');
+        this.router.navigate(['/admin/artistas']);
+      },
+      error: (err) => {
+        console.error('Error al crear artista:', err);
+        alert('Error al crear artista: ' + (err.error?.mensaje || err.message));
+      }
+    });
   }
 
   cancelar() {
