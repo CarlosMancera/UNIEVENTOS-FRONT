@@ -17,6 +17,9 @@ export class CrearEventoComponent implements OnInit {
   tiposDeEvento = ['CONCIERTO', 'RECITAL', 'PARTIDO DE FUTBOL'];
   ciudades = ['Bogotá', 'Medellín', 'Cali', 'Barranquilla'];
   artistas: any[] = [];
+  imagenPortadaFile!: File;
+  imagenLocalidadesFile!: File;
+  localidadFiles: { [index: number]: File } = {};
 
   constructor(
     private fb: FormBuilder,
@@ -61,27 +64,25 @@ export class CrearEventoComponent implements OnInit {
 
   eliminarLocalidad(index: number) {
     this.localidades.removeAt(index);
+    delete this.localidadFiles[index];
   }
 
   onFileChange(event: any, tipo: string, index?: number) {
     const file = event.target.files[0];
     if (!file) return;
 
-    const extension = file.name.split('.').pop();
-    const uniqueName = `${tipo}_${Date.now()}_${Math.floor(Math.random() * 1000)}.${extension}`;
-    const localPath = `assets/imagenes/eventos/${uniqueName}`;
+    const objectUrl = URL.createObjectURL(file);
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (tipo === 'portada') {
-        this.crearEventoForm.patchValue({ imagenPortada: localPath });
-      } else if (tipo === 'localidadesGeneral') {
-        this.crearEventoForm.patchValue({ imagenLocalidades: localPath });
-      } else if (tipo === 'localidades' && index !== undefined) {
-        this.localidades.at(index).patchValue({ imagen: localPath });
-      }
-    };
-    reader.readAsDataURL(file);
+    if (tipo === 'portada') {
+      this.crearEventoForm.patchValue({ imagenPortada: objectUrl });
+      this.imagenPortadaFile = file;
+    } else if (tipo === 'localidadesGeneral') {
+      this.crearEventoForm.patchValue({ imagenLocalidades: objectUrl });
+      this.imagenLocalidadesFile = file;
+    } else if (tipo === 'localidades' && index !== undefined) {
+      this.localidades.at(index).patchValue({ imagen: objectUrl });
+      this.localidadFiles[index] = file;
+    }
   }
 
   listarArtistas() {
@@ -102,8 +103,16 @@ export class CrearEventoComponent implements OnInit {
     }
 
     const evento = this.crearEventoForm.value;
-    this.httpClient.post<any>(ENDPOINTS.crearEvento, evento).subscribe({
-      next: () => {
+    const clone = JSON.parse(JSON.stringify(evento));
+
+    clone.localidades.forEach((loc: any) => delete loc.imagen);
+    delete clone.imagenPortada;
+    delete clone.imagenLocalidades;
+
+    this.httpClient.post<any>(ENDPOINTS.crearEvento, clone).subscribe({
+      next: (res) => {
+        const idEvento = res.respuesta;
+        this.subirImagenes(idEvento);
         alert('Evento creado exitosamente');
         this.crearEventoForm.reset();
         this.localidades.clear();
@@ -111,6 +120,36 @@ export class CrearEventoComponent implements OnInit {
       error: (err) => {
         console.error('Error al crear evento:', err);
         alert('Error al crear el evento');
+      }
+    });
+  }
+
+  subirImagenes(idEvento: number) {
+    const pathParams = new Map<string, string>();
+    pathParams.set('idEvento', idEvento.toString());
+
+    const portadaForm = new FormData();
+    portadaForm.append('imagen', this.imagenPortadaFile);
+    this.httpClient.post<any>(ENDPOINTS.agregarImagenEvento, portadaForm, pathParams).subscribe();
+
+    const localidadGeneralForm = new FormData();
+    localidadGeneralForm.append('imagen', this.imagenLocalidadesFile);
+    this.httpClient.post<any>(ENDPOINTS.agregarImagenLocalidad, localidadGeneralForm, new Map<string, string>([
+      ['idEvento', idEvento.toString()],
+      ['nombreLocalidad', 'general']
+    ])).subscribe();
+
+    this.localidades.controls.forEach((loc, index) => {
+      const file = this.localidadFiles[index];
+      const nombre = loc.get('nombre')?.value;
+
+      if (file && nombre) {
+        const form = new FormData();
+        form.append('imagen', file);
+        this.httpClient.post<any>(ENDPOINTS.agregarImagenLocalidad, form, new Map<string, string>([
+          ['idEvento', idEvento.toString()],
+          ['nombreLocalidad', nombre]
+        ])).subscribe();
       }
     });
   }

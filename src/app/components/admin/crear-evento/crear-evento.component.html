@@ -3,6 +3,7 @@
 
   <form [formGroup]="crearEventoForm" (ngSubmit)="onSubmit()" class="form-evento">
     <div class="form-grid">
+      <!-- Columna Izquierda -->
       <div class="form-col">
         <div class="form-group">
           <label>Nombre</label>
@@ -49,40 +50,57 @@
         </div>
       </div>
 
+      <!-- Columna Derecha -->
       <div class="form-col">
         <div class="image-upload">
           <label>Imagen Portada</label>
-          <input type="file" (change)="onFileChange($event, 'portada')" />
-          <img *ngIf="crearEventoForm.get('imagenPortada')?.value"
-               [src]="crearEventoForm.get('imagenPortada')?.value" width="200" />
+          <input type="file" accept="image/*" (change)="onFileChange($event, 'portada')" />
+          <div class="preview">
+            <img *ngIf="crearEventoForm.get('imagenPortada')?.value"
+                 [src]="crearEventoForm.get('imagenPortada')?.value"
+                 width="200" />
+          </div>
         </div>
 
         <div class="image-upload">
           <label>Imagen Localidades</label>
-          <input type="file" (change)="onFileChange($event, 'localidadesGeneral')" />
-          <img *ngIf="crearEventoForm.get('imagenLocalidades')?.value"
-               [src]="crearEventoForm.get('imagenLocalidades')?.value" width="200" />
+          <input type="file" accept="image/*" (change)="onFileChange($event, 'localidadesGeneral')" />
+          <div class="preview">
+            <img *ngIf="crearEventoForm.get('imagenLocalidades')?.value"
+                 [src]="crearEventoForm.get('imagenLocalidades')?.value"
+                 width="200" />
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- Localidades -->
     <div class="localidades-section">
       <h3>Localidades</h3>
-      <button type="button" (click)="agregarLocalidad()">+ Añadir Localidad</button>
+      <button type="button" class="add-btn" (click)="agregarLocalidad()">+ Añadir Localidad</button>
 
       <div formArrayName="localidades">
-        <div *ngFor="let localidad of localidades.controls; let i = index" [formGroupName]="i">
+        <div *ngFor="let localidad of localidades.controls; let i = index" [formGroupName]="i" class="localidad-item">
           <input formControlName="nombre" placeholder="Nombre" />
           <input formControlName="precio" type="number" placeholder="Precio" />
           <input formControlName="capacidad" type="number" placeholder="Capacidad" />
           <input formControlName="descripcion" placeholder="Descripción" />
-          <input type="file" (change)="onFileChange($event, 'localidades', i)" />
-          <input formControlName="imagen" placeholder="URL imagen generada" />
+
+          <label>Imagen Localidad</label>
+          <input type="file" accept="image/*" (change)="onFileChange($event, 'localidades', i)" />
+          <div class="preview">
+            <img *ngIf="localidad.get('imagen')?.value"
+                 [src]="localidad.get('imagen')?.value"
+                 width="150" />
+          </div>
+
+          <input formControlName="imagen" placeholder="URL imagen generada" readonly />
           <button type="button" (click)="eliminarLocalidad(i)">✕</button>
         </div>
       </div>
     </div>
 
+    <!-- Botones -->
     <div class="form-actions">
       <button type="button" routerLink="/admin">Cancelar</button>
       <button type="submit">Crear Evento</button>

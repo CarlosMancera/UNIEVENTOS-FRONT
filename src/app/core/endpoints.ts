@@ -29,6 +29,10 @@ export const ENDPOINTS = {
   editarArtista: new Endpoint(URL_BASE, 'api/administrador/editar-artista', true),
   eliminarArtista: new Endpoint(URL_BASE, 'api/administrador/eliminar-artista/{id}', true),
   crearEvento: new Endpoint(URL_BASE, 'api/administrador/crear-evento', true),
+  agregarImagenEvento: new Endpoint(URL_BASE,'api/administrador/agregar-imagen/{idEvento}',true),
+  agregarImagenLocalidad: new Endpoint(URL_BASE, 'api/administrador/agregar-imagen-localidad/{idEvento}/{nombreLocalidad}',true
+  ),
+
 
 
 };
