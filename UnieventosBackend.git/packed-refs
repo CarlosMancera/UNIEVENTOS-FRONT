@@ -1,0 +1,14 @@
+# pack-refs with: peeled fully-peeled sorted 
+b0d52683158e7e95eae91fc4cd9cf5d7a6bfc0c9 refs/heads/10ServExt
+00d688eaa014f84982e4054fd49f5d7edc939e1e refs/heads/11AutenJwt
+b96feb398c41c1ba9107f6f335cc6bf96c299b51 refs/heads/12Controller
+922bdcefc8e3913fa655a2f31ef3f6b2c1695500 refs/heads/Artista
+7505a728ae0b8af0276a460846bbbcd4c018d414 refs/heads/Deseo
+13d88e51b3eccb45fc986745e07861f9e6896fe0 refs/heads/Evento
+705a71a6045a548eb9113e4927537efb1bc2553b refs/heads/Orden
+6c1fcd7d77599d25660a456f67064512b8b26c2f refs/heads/controlFinal
+b6135cb3e065e6bf2bf40efe22f16d68f413229a refs/heads/main
+3224164198005a9abbaa851e6477db4b296fefa1 refs/heads/mainPrueba
+88663cc7012d59e891298444e2a3016580861d03 refs/heads/master
+4b59ef8ce97503f6bb82caa96d262834ebde314f refs/heads/valoracion
+7539797acc3f3e9b38c629d3406ce46f8d939d90 refs/heads/victor
