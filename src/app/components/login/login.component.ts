@@ -16,7 +16,6 @@ import Swal from 'sweetalert2';
     CommonModule,
     FormsModule,
     MatDialogModule,
-    ForgotPasswordDialogComponent
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
