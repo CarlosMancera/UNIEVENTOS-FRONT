@@ -20,6 +20,7 @@ import { ActualizarPasswordComponent } from './actualizar-password/actualizar-pa
 import { EquipoAdminComponent } from './pages/admin/equipo-admin/equipo-admin.component';
 import { MatchAdminComponent } from './components/admin/match-admin/match-admin.component';
 import { MatchCrearComponent } from './components/admin/match-crear/match-crear.component';
+import { PartidosComponent } from './components/partidos/partidos/partidos.component';
 
 
 export const routes: Routes = [
@@ -29,7 +30,7 @@ export const routes: Routes = [
    { path: 'actualizar-password', component: ActualizarPasswordComponent },
    { path: 'login', component: LoginComponent },
    { path: 'registro', component: RegistroComponent },
-   { path: 'eventos', component: EventosComponent},
+   { path: 'partidos', component: PartidosComponent},
    { path: 'compras', component: ComprasComponent},
    { path: 'admin', component: AdminComponent,
       children: [

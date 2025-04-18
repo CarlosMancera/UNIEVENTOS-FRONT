@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { PublicoService } from '../../services/publico.service';
-import { EventoDTO } from '../../dto/eventoDTO/evento-dto';
-
-
+import { MatchService } from '../../services/match.service';
+import { Match } from '../../models/match.model';
+import { Team } from '../../models/team.model';
+import { TeamService } from '../../services/Team.service';
 
 @Component({
   selector: 'app-inicio',
@@ -13,30 +13,56 @@ import { EventoDTO } from '../../dto/eventoDTO/evento-dto';
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.css'
 })
-export class InicioComponent {
-  eventos: EventoDTO[] = [];
-
+export class InicioComponent implements OnDestroy {
+  partidos: Match[] = [];
+  equipos: Team[] = [];
   currentSlide = 0;
+  intervaloAutoPlay: any;
 
-  constructor(private publicoService: PublicoService) {
-    this.eventos = [];
-    this.obtenerEventos();
-  
- }
- 
- public obtenerEventos(){
-  this.publicoService.listarEventos().subscribe({
-    next: (data) => {
-      this.eventos = data.respuesta;
-    },
-    error: (error) => {
-      console.error(error);
-    },
-  });
- }
- 
+  constructor(private matchService: MatchService, private teamService: TeamService) {
+    this.obtenerDatos();
+  }
 
- 
-  
+  ngOnDestroy(): void {
+    clearInterval(this.intervaloAutoPlay); // limpiar si el componente se destruye
+  }
+
+  obtenerDatos() {
+    this.matchService.listar().subscribe({
+      next: (data) => {
+        this.partidos = data;
+        this.iniciarAutoPlay(); // ⏱️ Inicia auto-play cuando se cargan
+      },
+      error: (err) => console.error(err)
+    });
+
+    this.teamService.listar().subscribe({
+      next: (data) => this.equipos = data,
+      error: (err) => console.error(err)
+    });
+  }
+
+  obtenerEntrenador(nombre: string): string {
+    const equipo = this.equipos.find(eq => eq.nombre === nombre);
+    return equipo?.entrenador ?? 'Técnico no definido';
+  }
+
+  obtenerEscudo(nombre: string): string {
+    const equipo = this.equipos.find(eq => eq.nombre === nombre);
+    return equipo?.escudoUrl ?? '';
+  }
+
+  nextSlide(): void {
+    this.currentSlide = (this.currentSlide + 1) % this.partidos.length;
+  }
+
+  prevSlide(): void {
+    this.currentSlide = (this.currentSlide - 1 + this.partidos.length) % this.partidos.length;
+  }
+
+  iniciarAutoPlay(): void {
+    this.intervaloAutoPlay = setInterval(() => {
+      this.nextSlide();
+    }, 5000);
+  }
 }
-

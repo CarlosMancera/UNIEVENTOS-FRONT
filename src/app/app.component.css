@@ -1,253 +1,196 @@
-/* Variables */
-:root {
-  --primary-color: #ecedf8;
-  --secondary-color: #eceaf5;
-  --text-light: #fff;
-  --text-dark: #333;
-  --background-light: #f8f8f8;
-  --max-width: 1200px;
+/* === GENERAL FIX === */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #111; /* Para evitar fondo blanco en zonas sin contenido */
+  font-family: 'Segoe UI', sans-serif;
 }
 
-/* Header Styles */
+html, body {
+  height: 100%;
+}
+
+/* === HEADER === */
 .main-header {
-  background: linear-gradient(rgba(17, 25, 134, 0.582), rgba(22, 11, 124, 0.7));
-  background-color: #130e5e;
-  background-size: cover;
-  background-position: center;
+  background: linear-gradient(90deg, #1b1b2f, #16213e);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   padding: 1rem 0;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  position: sticky;
+  position: fixed;
+  width: 100%;
   top: 0;
   z-index: 1000;
+  color: #f1f1f1;
 }
 
 .header-container {
-  max-width: var(--max-width);
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
+  flex-wrap: nowrap;
 }
 
 .logo-section {
   display: flex;
   align-items: center;
   gap: 1rem;
-
-  .logo {
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
-    transition: transform 0.3s ease;
-
-    &:hover {
-      transform: scale(1.1);
-    }
-  }
-
-  .brand-text {
-    display: flex;
-    flex-direction: column;
-
-    h1 {
-      color: #fff !important; /* Asegura que el color sea blanco */
-      margin: 0;
-      font-size: 2.0rem;
-      font-family: Arial, sans-serif;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-
-    .slogan {
-      color: #e0dada;
-      font-size: 0.9rem;
-      margin-top: 0.2rem;
-    }
-  }
 }
 
-.main-nav {
-  ul {
-    color: #e0dada;
-    display: flex;
-    gap: 2rem;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    align-items: center;
-
-    li {
-      position: relative;
-
-      a {
-        color: var(--text-light);
-        text-decoration: none;
-        font-size: 1.5rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        padding: 0.9rem;
-
-        &:hover {
-          color: var(--secondary-color);
-          transform: translateY(-2px);
-        }
-
-        &.active {
-          color: var(--secondary-color);
-        }
-
-        i {
-          font-size: 1.6rem;
-        }
-      }
-    }
-
-    li a {
-      color: var(--text-light);
-    }
-
-    .cart-icon, .user-icon {
-      a {
-        font-size: 2rem;
-        padding: 1rem;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.1);
-        
-        &:hover {
-          background: rgba(152, 95, 95, 0.2);
-        }
-      }
-    }
-  }
+.logo {
+  width: 55px;
+  height: 55px;
+  object-fit: contain;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+  transition: transform 0.3s ease;
+}
+.logo:hover {
+  transform: scale(1.1);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .header-container {
-    padding: 0 1rem;
-  }
-
-  .main-nav {
-    ul {
-      gap: 1rem;
-
-      li a {
-        font-size: 0.9rem;
-      }
-    }
-  }
-
-  .logo-section {
-    .brand-text {
-      h1 {
-        font-size: 2rem;
-      }
-
-      .slogan {
-        font-size: 1rem;
-      }
-    }
-  }
+.brand-text h1 {
+  font-size: 1.8rem;
+  color: #ffd700;
+  margin: 0;
+  letter-spacing: 1px;
+  text-shadow: 0 1px 3px #000;
+}
+.brand-text .slogan {
+  font-size: 0.9rem;
+  color: #cccccc;
 }
 
-@media (max-width: 640px) {
-  .header-container {
-    position: relative;
-  }
-
-  .main-nav {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: rgba(0, 0, 0, 0.9);
-    padding: 1rem;
-    transform: scaleY(0);
-    transform-origin: top;
-    transition: transform 0.3s ease;
-
-    &.active {
-      transform: scaleY(1);
-    }
-
-    ul {
-      flex-direction: column;
-      gap: 0.5rem;
-
-      li {
-        width: 100%;
-        
-        a {
-          padding: 0.8rem;
-          justify-content: center;
-
-          &:hover {
-            transform: none;
-            background: rgba(255, 255, 255, 0.1);
-          }
-        }
-      }
-
-      .cart-icon, .user-icon {
-        a {
-          background: none;
-        }
-      }
-    }
-  }
-
-  .menu-toggle {
-    display: block;
-    cursor: pointer;
-    padding: 0.5rem;
-    z-index: 100;
-    margin-left: auto;
-
-    span {
-      display: block;
-      width: 25px;
-      height: 3px;
-      background-color: var(--text-light);
-      margin: 5px 0;
-      transition: 0.3s;
-    }
-
-    &.active {
-      span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-      }
-
-      span:nth-child(2) {
-        opacity: 0;
-      }
-
-      span:nth-child(3) {
-        transform: rotate(-45deg) translate(7px, -6px);
-      }
-    }
-  }
+.main-nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1.5rem;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  flex-wrap: nowrap;
+}
+.main-nav ul li {
+  position: relative;
+  transition: transform 0.3s ease;
+}
+.main-nav ul li:hover {
+  transform: scale(1.05);
+}
+.main-nav ul li a {
+  color: #eeeeee;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.7rem 1.2rem;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+  background: transparent;
+  text-decoration: none;
+}
+.main-nav ul li a:hover {
+  background: rgba(255, 215, 0, 0.1);
+  box-shadow: 0 0 8px #ffd700;
+  color: #ffd700;
+}
+.main-nav ul li a.active {
+  background: linear-gradient(135deg, #ffb300, #4a148c);
+  color: #fff;
+  box-shadow: 0 0 12px #ffb300;
+  font-weight: bold;
+}
+.main-nav ul li a i {
+  margin-right: 6px;
+  font-size: 1.3rem;
 }
 
-/* Resto de los estilos (main-content y footer) permanecen igual */
+/* === DROPDOWN === */
+.user-icon.dropdown {
+  position: relative;
+  cursor: pointer;
+}
+.dropdown-content {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: #1f1b2e;
+  border-radius: 10px;
+  min-width: 180px;
+  padding: 0.5rem 0;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+  animation: fadeInDropdown 0.3s ease-in-out;
+  z-index: 9999;
+}
+.dropdown-content li {
+  padding: 0.5rem 1.2rem;
+}
+.dropdown-content li:hover {
+  background-color: #3d2c8d;
+}
+.dropdown-content a {
+  color: #eeeeee;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+}
+@keyframes fadeInDropdown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === BOTÓN HAMBURGUESA === */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+.menu-toggle span {
+  width: 25px;
+  height: 3px;
+  background-color: #ffffff;
+  transition: 0.3s;
+}
+.menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+.menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* === MAIN FIX (Espacio para header y separación de footer) === */
 .main-content {
-  min-height: calc(100vh - 200px);
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 2rem 1rem;
+  padding-top: 140px; /* más espacio si el header tiene padding interno */
+  padding-bottom: 60px; /* espacio visual antes del footer */
+  min-height: calc(100vh - 140px - 160px); /* asegura altura visible completa */
 }
 
+/* === FOOTER === */
 .main-footer {
-  background: var(--text-dark);
-  color: var(--text-light);
-  padding: 2rem 0;
+  background: linear-gradient(90deg, #1b1b2f, #16213e);
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #e0e0e0;
+  font-size: 0.95rem;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 0; /* 🔧 eliminas margen que separaba el footer del contenido */
 }
 
 .footer-container {
-  max-width: var(--max-width);
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
-  text-align: center;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
+
+.footer-container p {
+  margin: 0;
+  color: #bdbdbd;
+  text-shadow: 0 1px 2px black;
+}
+
+

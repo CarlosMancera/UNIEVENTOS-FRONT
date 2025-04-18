@@ -1,116 +1,113 @@
-.hero-section {
-  text-align: center;
-  padding: 4rem 1rem;
-  background: linear-gradient(rgb(206, 206, 207), rgba(173, 173, 173, 0.7)), 
-              url('/assets/images/hero-bg.jpg') center/cover;
-  color: rgb(5, 5, 5);
-}
-
-.hero-section h1 {
-  font-size: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.hero-section p {
-  font-size: 1.2rem;
-  margin-bottom: 1rem;
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.btn {
-  padding: 0.8rem 1.5rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: transform 0.3s;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-}
-
-.btn.primary {
-  background: #1a237e;
-  color: white;
-}
-
-.btn.secondary {
-  background: transparent;
-  border: 2px solid rgb(105, 46, 46);
-  color: rgb(66, 35, 35);
-}
-
-/* Estilos para la sección de eventos destacados */
+/* === EVENTOS DESTACADOS === */
 .eventos-destacados {
-  padding: 4rem 0;
+  padding: 4rem 1rem;
   text-align: center;
+  background: #1b1b2f;
+  color: #f1f1f1;
+  border-top: 2px solid #282c34;
 }
 
 .eventos-destacados h2 {
-  color: #131212;
+  font-size: 2.4rem;
   margin-bottom: 2rem;
+  color: #ffd700;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .carousel {
   position: relative;
-  max-width: 800px;
+  max-width: 880px;
   margin: 0 auto;
   padding: 2rem 0;
 }
 
 .carousel-item {
-  text-align: center;
-  padding: 2rem;
+  padding: 1rem;
+  transition: transform 0.5s ease-in-out;
 }
 
 .event-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  background-color: #232340;
+  padding: 2rem;
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  position: relative;
+}
+
+.event-content img.imagen-portada {
+  max-width: 260px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease;
+}
+
+.event-content img.imagen-portada:hover {
+  transform: scale(1.03);
 }
 
 .event-title {
-  color: #1a237e;
-  font-size: 2rem;
-  margin: 0;
+  font-size: 1.7rem;
+  font-weight: bold;
+  color: #ffd700;
+}
+
+.escudos-equipos {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.escudos-equipos img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  background: #fff;
+  padding: 6px;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
 }
 
 .event-subtitle {
-  color: #181818;
-  font-size: 1.2rem;
-  margin: 0;
+  font-size: 1rem;
+  color: #cccccc;
+  margin: 0.4rem 0;
 }
 
 .event-buttons {
   display: flex;
+  justify-content: center;
   gap: 1rem;
-  align-items: center;
   margin-top: 1rem;
 }
 
 .disponible-badge {
-  background-color: #1a237e;
-  color: rgb(245, 237, 237);
+  background-color: #4caf50;
+  color: white;
   padding: 0.5rem 1rem;
-  border-radius: 4px;
+  border-radius: 20px;
+  font-weight: bold;
   font-size: 0.9rem;
 }
 
-.comprar-btn {
-  background-color: #0b1155;
-  color: white;
+.buy-button {
+  background-color: #ffd700;
+  color: #1b1b1b;
+  padding: 0.6rem 1.2rem;
   border: none;
-  padding: 0.5rem 1.5rem;
-  border-radius: 4px;
+  border-radius: 30px;
   cursor: pointer;
-  font-size: 0.9rem;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+.buy-button:hover {
+  background-color: #e6c200;
 }
 
 .carousel-controls {
@@ -125,27 +122,14 @@
 }
 
 .control-btn {
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #303053;
   color: white;
   border: none;
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.control-btn:hover {
-  background-color: rgba(245, 226, 226, 0.925);
-}
-
-/* Para los botones de navegación circulares */
-.control-btn.prev,
-.control-btn.next {
   font-size: 0;
-  position: relative;
+  cursor: pointer;
 }
 
 .control-btn.prev::before,
@@ -166,62 +150,71 @@
   transform: rotate(45deg);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .event-buttons {
-      flex-direction: column;
-  }
-  
-  .carousel-controls {
-      padding: 0 1rem;
-  }
+/* === EQUIPOS VINCULADOS === */
+.equipos-section {
+  padding: 4rem 1rem;
+  background: #16213e;
+  color: #eeeeee;
+  border-top: 2px solid #222;
 }
 
-/* Estilos para la sección social */
-.social-container {
+.equipos-section h2 {
+  text-align: center;
+  font-size: 2.2rem;
+  color: #ffd700;
+  margin-bottom: 2rem;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.equipos-grid {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 30px;
-  padding-right: 1%;
-  margin-bottom: 1%;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
 }
 
-.social-text {
-  margin-right: 30px;
-  font-size: 2rem;
-}
-
-.social-icons img {
-  width: 50px;
-  height: auto;
-  margin-left: 20px;
+.equipo-card {
+  background-color: #1e1e33;
+  border-radius: 12px;
+  padding: 1rem;
+  color: white;
+  text-align: center;
+  width: 160px;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.05);
   transition: transform 0.3s ease;
 }
 
-.social-icons img:hover {
-  transform: translateY(-5px);
+.equipo-card:hover {
+  transform: scale(1.06);
 }
 
-/* Media queries para responsividad */
-@media (max-width: 768px) {
-  .hero-section h1 {
-      font-size: 2rem;
-  }
+.equipo-card img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
 
-  .hero-buttons {
-      flex-direction: column;
-      gap: 0.5rem;
-  }
+.equipo-card h4 {
+  font-size: 1rem;
+  margin: 0.3rem 0;
+  color: #ffd700;
+}
 
-  .social-container {
-      flex-direction: column;
-      align-items: center;
-      padding-right: 0;
-  }
+.equipo-card p,
+.equipo-card small {
+  font-size: 0.85rem;
+  color: #ccc;
+}
 
-  .social-text {
-      margin-right: 0;
-      margin-bottom: 1rem;
-  }
+.carousel-item {
+  display: none;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-item.active {
+  display: block;
 }

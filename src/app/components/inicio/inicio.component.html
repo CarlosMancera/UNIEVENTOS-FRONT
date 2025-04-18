@@ -1,69 +1,47 @@
-<div class="hero-section">
-    <h1>Creamos Experiencias Inolvidables</h1>
-    <p>Gestionamos los mejores eventos de futbol Colombiano.</p>
-    <div class="hero-buttons">
-      <button class="btn primary">Ver Próximos Eventos</button>
-      <button class="buy-button"[routerLink]="['/contactenos']" routerLinkActive="active">Contáctenos</button>
+<div class="eventos-destacados">
+  <h2>Partidos Destacados</h2>
+  <div class="carousel slide">
+    <div class="carousel-inner">
+      <div class="carousel-item" *ngFor="let partido of partidos; let i = index" [class.active]="i === currentSlide">
+        <div class="event-content">
+          <img [src]="partido.imagenPortada" alt="Portada" class="imagen-portada" />
+          <h3 class="event-title">{{ partido.equipoLocal }} vs {{ partido.equipoVisitante }}</h3>
+
+          <div class="escudos-equipos">
+            <img [src]="obtenerEscudo(partido.equipoLocal)" alt="Escudo Local">
+            <img [src]="obtenerEscudo(partido.equipoVisitante)" alt="Escudo Visitante">
+          </div>
+
+          <p class="event-subtitle">
+            <strong>DT Local:</strong> {{ obtenerEntrenador(partido.equipoLocal) }} |
+            <strong>DT Visitante:</strong> {{ obtenerEntrenador(partido.equipoVisitante) }}
+          </p>
+          <p class="event-subtitle"><strong>Fecha:</strong> {{ partido.fechaHora | date:'short' }}</p>
+          <p class="event-subtitle">{{ partido.descripcion }}</p>
+
+          <div class="event-buttons">
+            <span class="disponible-badge">{{ partido.estado }}</span>
+            <button class="buy-button" [routerLink]="['/compras']">Comprar Entradas</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-controls">
+      <button class="control-btn prev" (click)="prevSlide()">Prev</button>
+      <button class="control-btn next" (click)="nextSlide()">Next</button>
     </div>
   </div>
-  
-  <div class="eventos-destacados">
-    <h2>Eventos Destacados</h2>
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <div class="event-content">
-                    <h3 class="event-title">Partido del Nacional</h3>
-                    <p class="event-subtitle">Medellin-Antioquia</p>
-                    <div class="event-buttons">
-                        <span class="disponible-badge">DISPONIBLE</span>
-                        <button class="buy-button" [routerLink]="['/compras']" routerLinkActive="active">Comprar Entradas</button>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel-item active">
-              <div class="event-content">
-                  <h3 class="event-title">Partido del Cucuta</h3>
-                  <p class="event-subtitle">Cucuta-Norte de Santander</p>
-                  <div class="event-buttons">
-                      <span class="disponible-badge">DISPONIBLE</span>
-                      <button class="buy-button" [routerLink]="['/compras']" routerLinkActive="active">Comprar Entradas</button>
-                  </div>
-              </div>
-          </div>
-          <div class="carousel-item active">
-            <div class="event-content">
-                <h3 class="event-title">Partido del Pereira</h3>
-                <p class="event-subtitle">Pereira-Risaralda</p>
-                <div class="event-buttons">
-                    <span class="disponible-badge">DISPONIBLE</span>
-                    <button class="buy-button" [routerLink]="['/compras']" routerLinkActive="active">Comprar Entradas</button>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-item active">
-          <div class="event-content">
-              <h3 class="event-title">Partido del Quindio</h3>
-              <p class="event-subtitle">Aremenia-Quindio</p>
-              <div class="event-buttons">
-                  <span class="disponible-badge">DISPONIBLE</span>
-                  <button class="buy-button" [routerLink]="['/compras']" routerLinkActive="active">Comprar Entradas</button>
-              </div>
-          </div>
-      </div>
-            <!-- Repite para más eventos -->
-        </div>
-        <div class="carousel-controls">
-            <button class="control-btn prev">Prev</button>
-            <button class="control-btn next">Next</button>
-        </div>
-    </div>
 </div>
-  <div class="social-container">
-   
-    <div class="social-icons">
-        <a href="#"><img src="facebook.png" alt="Facebook"></a>
-        <a href="#"><img src="twitter.png" alt="Twitter"></a>
-        <a href="#"><img src="instagram.png" alt="Instagram"></a>
+
+<div class="equipos-section">
+  <h2>Equipos Vinculados</h2>
+  <div class="equipos-grid">
+    <div class="equipo-card" *ngFor="let equipo of equipos">
+      <img [src]="equipo.escudoUrl" alt="Escudo de {{ equipo.nombre }}">
+      <h4>{{ equipo.nombre }}</h4>
+      <p>{{ equipo.ciudad }}</p>
+      <small>DT: {{ equipo.entrenador }}</small>
     </div>
+  </div>
 </div>

@@ -1,0 +1,43 @@
+<div class="eventos-container">
+  <h1>Partidos</h1>
+  <p class="subtitle">Explora todos los partidos disponibles</p>
+
+  <div class="search-group">
+    <div class="search-input-container">
+      <span class="search-icon">🔍</span>
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar por equipos...">
+    </div>
+
+    <div class="select-container">
+      <label>Ciudad equipo local:</label>
+      <select [(ngModel)]="ciudadLocal">
+        <option value="">Todas</option>
+        <option *ngFor="let ciudad of getCiudades()" [value]="ciudad">{{ ciudad }}</option>
+      </select>
+    </div>
+
+    <div class="select-container">
+      <label>Ciudad equipo visitante:</label>
+      <select [(ngModel)]="ciudadVisitante">
+        <option value="">Todas</option>
+        <option *ngFor="let ciudad of getCiudades()" [value]="ciudad">{{ ciudad }}</option>
+      </select>
+    </div>
+
+    <button class="clear-button" (click)="limpiarFiltros()">Limpiar filtros</button>
+  </div>
+
+  <div class="events-grid">
+    <div class="event-card" *ngFor="let partido of filteredMatches()">
+      <img [src]="partido.imagenPortada" alt="Imagen partido">
+      <div class="event-info">
+        <h3>{{ partido.equipoLocal }} vs {{ partido.equipoVisitante }}</h3>
+        <p class="subtitle">{{ partido.tipoEvento }}</p>
+        <p class="date-location">{{ partido.fechaHora | date: 'medium' }}</p>
+        <p class="date-location">{{ partido.descripcion }}</p>
+        <span class="badge" *ngIf="partido.estado === 'PROGRAMADO'">PROGRAMADO</span>
+        <button class="buy-button" [routerLink]="['/compras']">Comprar Entradas</button>
+      </div>
+    </div>
+  </div>
+</div>
