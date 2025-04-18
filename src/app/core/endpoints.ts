@@ -45,5 +45,6 @@ export const ENDPOINTS = {
 
   crearTicket: new Endpoint(URL_BASE, 'tickets', true),
 
+  listarTicketsPorCuenta: new Endpoint(URL_BASE, 'tickets/cuenta/{cuentaId}', true),
 
 };

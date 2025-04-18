@@ -3,5 +3,6 @@ export interface Section {
   matchId: number;
   nombre: string;
   capacidadTotal: number;
+  capacidadRestante: number;
   precio: number;
 }

@@ -94,6 +94,7 @@ export class MatchCrearComponent implements OnInit {
       matchId: this.match.id!,
       nombre: this.nuevaSeccion.nombre!,
       capacidadTotal: this.nuevaSeccion.capacidadTotal!,
+      capacidadRestante: 0,
       precio: this.nuevaSeccion.precio!
     };
 

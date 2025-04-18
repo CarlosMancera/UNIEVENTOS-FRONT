@@ -12,6 +12,7 @@ import { CrearTicketDTO } from '../dto/CrearTicketDTO';
 import { ENDPOINTS } from '../core/endpoints';
 import { Team } from '../models/team.model';
 import { TeamService } from '../services/Team.service';
+import { CuentaService } from '../services/cuenta.service';
 
 @Component({
   selector: 'app-compra-boleta',
@@ -27,12 +28,24 @@ export class CompraBoletaComponent implements OnInit {
   form!: FormGroup;
   portadores!: FormArray;
   soyElPortador: boolean = false;
+  adminData = {
+    cedula: '',
+    nombreCompleto: '',
+    direccion: '',
+    telefono: '',
+    correo: '',
+    nuevaContrasena: '',
+    confirmarContrasena: ''
+  };
+
+  isEditing = false;
 
   constructor(
     private route: ActivatedRoute,
     private matchService: MatchService,
     private sectionService: SectionService,
     private fb: FormBuilder,
+    private cuentaService: CuentaService,
     private authService: AuthService,
     private http: HttpClientService,
     private router: Router,
@@ -40,11 +53,41 @@ export class CompraBoletaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+
     if (!this.authService.isLoggedIn()) {
       alert('Debes iniciar sesión para continuar.');
       this.router.navigate(['/login']);
       return;
     }
+
+    const userId = this.authService.getUserIdFromToken();
+    if (!userId) {
+      alert('No se pudo obtener el ID del usuario.');
+      return;
+    }
+
+    const pathParams = new Map<string, string>();
+    pathParams.set('id', userId.toString());
+
+    this.http.get<any>(ENDPOINTS.recuperaInfoCuenta, pathParams).subscribe({
+      next: (data) => {
+        this.adminData = {
+          cedula: data.cedula,
+          nombreCompleto: data.nombre,
+          direccion: data.direccion,
+          telefono: data.telefono,
+          correo: data.email,
+          nuevaContrasena: '',
+          confirmarContrasena: ''
+        };
+        this.isEditing = false;
+      },
+      error: (err) => {
+        console.error('Error al obtener información del administrador:', err);
+        alert('Error al obtener información del administrador.');
+      }
+    });
+
 
     const matchId = Number(this.route.snapshot.paramMap.get('id'));
 
@@ -83,7 +126,6 @@ export class CompraBoletaComponent implements OnInit {
 
   actualizarCantidadBoletas(): void {
     const cantidad = this.form.get('cantidad')?.value || 1;
-    const actual = this.portadores.length;
     this.portadores.clear();
 
     for (let i = 0; i < cantidad; i++) {
@@ -94,7 +136,8 @@ export class CompraBoletaComponent implements OnInit {
           nombre: ['', Validators.required],
           direccion: ['', Validators.required],
           telefono: ['', Validators.required],
-          email: ['', [Validators.required, Validators.email]]
+          email: ['', [Validators.required, Validators.email]],
+          soyElPortador: [false]
         })
       );
     }
@@ -122,7 +165,7 @@ export class CompraBoletaComponent implements OnInit {
       return;
     }
 
-    const portadores = this.portadoresArray.value;
+    const portadores = this.portadoresArray.getRawValue();
 
     for (let p of portadores) {
       const ticket: CrearTicketDTO = {
@@ -157,4 +200,58 @@ export class CompraBoletaComponent implements OnInit {
     const equipo = this.equipos.find(e => e.nombre === nombre);
     return equipo?.ciudad || 'Ciudad desconocida';
   }
+
+  onTogglePortador(index: number): void {
+    const grupo = this.portadoresArray.at(index);
+    const soyElPortadorValue = grupo.get('soyElPortador')?.value;
+
+    if (soyElPortadorValue) {
+      this.marcarComoPortador(index);
+    } else {
+      this.desmarcarPortador(index);
+    }
+  }
+
+  marcarComoPortador(index: number): void {
+    this.portadoresArray.controls.forEach((grupo, i) => {
+      const soyElPortadorCtrl = grupo.get('soyElPortador');
+      if (!soyElPortadorCtrl) return;
+
+      if (i === index) {
+        soyElPortadorCtrl.setValue(true);
+        grupo.patchValue({
+          cedula: this.adminData.cedula,
+          nombre: this.adminData.nombreCompleto,
+          direccion: this.adminData.direccion,
+          telefono: this.adminData.telefono,
+          email: this.adminData.correo
+        });
+
+        grupo.get('cedula')?.disable();
+        grupo.get('nombre')?.disable();
+        grupo.get('direccion')?.disable();
+        grupo.get('telefono')?.disable();
+        grupo.get('email')?.disable();
+      } else {
+        soyElPortadorCtrl.setValue(false);
+        this.desmarcarPortador(i);
+      }
+    });
+  }
+
+  desmarcarPortador(index: number): void {
+    const grupo = this.portadoresArray.at(index);
+    grupo.get('cedula')?.reset('');
+    grupo.get('nombre')?.reset('');
+    grupo.get('direccion')?.reset('');
+    grupo.get('telefono')?.reset('');
+    grupo.get('email')?.reset('');
+
+    grupo.get('cedula')?.enable();
+    grupo.get('nombre')?.enable();
+    grupo.get('direccion')?.enable();
+    grupo.get('telefono')?.enable();
+    grupo.get('email')?.enable();
+  }
+
 }

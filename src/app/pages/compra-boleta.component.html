@@ -30,6 +30,7 @@
             <th>Sección</th>
             <th>Precio</th>
             <th>Capacidad Total</th>
+            <th>Capacidad Restante</th>
           </tr>
         </thead>
         <tbody>
@@ -37,6 +38,7 @@
             <td>{{ s.nombre }}</td>
             <td>{{ s.precio | currency:'COP' }}</td>
             <td>{{ s.capacidadTotal | number:'1.0-0' }}</td>
+            <td>{{ s.capacidadRestante | number:'1.0-0' }}</td>
           </tr>
         </tbody>
       </table>
@@ -50,16 +52,17 @@
         <input type="number" formControlName="cantidad" min="1" (change)="actualizarCantidadBoletas()" placeholder="Cantidad de boletas">
       </div>
 
-      <div class="form-group">
-        <label>
-          <input type="checkbox" formControlName="soyElPortador" (change)="soyElPortador = !soyElPortador">
-          Soy el único portador
-        </label>
-      </div>
-
       <div formArrayName="portadores">
-        <div *ngFor="let p of portadoresArray.controls; let i = index" [formGroupName]="i">
+        <div *ngFor="let p of portadoresArray.controls; let i = index" [formGroupName]="i" class="portador-card">
           <h4>Portador {{ i + 1 }}</h4>
+
+          <div class="checkbox-portador">
+            <label>
+              <input type="checkbox" formControlName="soyElPortador" (change)="onTogglePortador(i)">
+              Soy el portador
+            </label>
+          </div>
+
           <div class="form-group">
             <select formControlName="sectionId">
               <option value="">Sección</option>

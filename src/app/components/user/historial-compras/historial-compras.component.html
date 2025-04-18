@@ -1,92 +1,21 @@
 <div class="historial-container">
-    <h2>Historial de Compras</h2>
-    <p>Revisa tus compras anteriores</p>
+  <h2>Mis Tickets</h2>
+  <p>Consulta tus entradas compradas</p>
 
-    <div class="search-bar">
-        <span class="search-icon">🔍</span>
-        <input type="text" placeholder="Buscar eventos..." [(ngModel)]="searchText">
+  <div class="tickets-grid">
+    <div class="ticket-card" *ngFor="let ticket of historialCompras">
+      <div class="ticket-header">
+        <span class="ticket-id">#{{ ticket.id }}</span>
+        <span class="ticket-estado" [class]="ticket.estado.toLowerCase()">{{ ticket.estado }}</span>
+      </div>
+
+      <div class="ticket-body">
+        <p><strong>Evento:</strong> {{ ticket.nombreMatch }}</p>
+        <p><strong>Sección:</strong> {{ ticket.nombreSeccion }}</p>
+        <p><strong>Portador:</strong> {{ ticket.nombrePortador }} ({{ ticket.emailPortador }})</p>
+        <p><strong>Fecha de compra:</strong> {{ ticket.fechaCompra | date:'fullDate' }} - {{ ticket.fechaCompra | date:'shortTime' }}</p>
+        <p><strong>Código:</strong> <code>{{ ticket.codigo }}</code></p>
+      </div>
     </div>
-
-    <table class="historial-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Evento</th>
-                <th>Fecha</th>
-                <th>Cantidad</th>
-                <th>Total</th>
-                <th>Estado</th>
-                <th>Cupones</th>
-                <th>Ver</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let compra of historialCompras">
-                <td>{{compra.id}}</td>
-                <td>{{compra.evento}}</td>
-                <td>{{compra.fecha}}</td>
-                <td>{{compra.cantidad}}</td>
-                <td>${{compra.total}}</td>
-                <td>
-                    <span [class]="'status-badge ' + compra.estado.toLowerCase()">
-                        {{compra.estado}}
-                    </span>
-                </td>
-                <td>{{compra.cupones}}</td>
-                <td>
-                    <button class="view-btn" (click)="openModal(compra)">
-                        <i class="fas fa-eye"></i>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="pagination">
-        <span>Mostrando 1-5 de 5 compras</span>
-        <div class="pagination-buttons">
-            <button class="pagination-btn">Anterior</button>
-            <button class="pagination-btn">Siguiente</button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal del evento -->
-<div class="modal" *ngIf="showModal">
-    <div class="modal-content">
-        <span class="close" (click)="closeModal()">&times;</span>
-        <h2>{{selectedEvent?.evento}}</h2>
-        <div class="event-details">
-            <div class="event-info">
-                <p><strong>Descripción</strong></p>
-                <p>{{selectedEvent?.descripcion}}</p>
-                <p><strong>Lugar:</strong> {{selectedEvent?.lugar}}</p>
-                <p><strong>Fecha:</strong> {{selectedEvent?.fecha}}</p>
-                <p><strong>Cantidad de entradas:</strong> {{selectedEvent?.cantidad}}</p>
-                <p><strong>Total pagado:</strong> ${{selectedEvent?.total}}</p>
-                <p><strong>Estado:</strong> {{selectedEvent?.estado}}</p>
-                <p><strong>Cupón aplicado:</strong> {{selectedEvent?.cupones}}</p>
-            </div>
-            <div class="event-distribution">
-                <h3>Distribución de localidades</h3>
-                <div class="seats-info">
-                    <div class="seat-type">
-                        <span>VIP</span>
-                        <span>{{selectedEvent?.localidades.vip.disponible}}</span>
-                        <span>${{selectedEvent?.localidades.vip.precio}}</span>
-                    </div>
-                    <div class="seat-type">
-                        <span>Platea</span>
-                        <span>{{selectedEvent?.localidades.platea.disponible}}</span>
-                        <span>${{selectedEvent?.localidades.platea.precio}}</span>
-                    </div>
-                    <div class="seat-type">
-                        <span>General</span>
-                        <span>{{selectedEvent?.localidades.general.disponible}}</span>
-                        <span>${{selectedEvent?.localidades.general.precio}}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+  </div>
 </div>
