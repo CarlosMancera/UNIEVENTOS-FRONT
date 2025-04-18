@@ -1,0 +1,88 @@
+<div class="futbol-layout">
+  <div class="compra-boleta-container" *ngIf="match">
+    <!-- Encabezado -->
+    <div class="header-match-info">
+      <img [src]="obtenerEscudo(match.equipoLocal)" alt="Escudo Local" class="escudo">
+      <div class="nombres-equipos">
+        <h2>{{ match.equipoLocal }}</h2>
+        <h3>VS</h3>
+        <h2>{{ match.equipoVisitante }}</h2>
+      </div>
+      <img [src]="obtenerEscudo(match.equipoVisitante)" alt="Escudo Visitante" class="escudo">
+    </div>
+
+    <!-- Detalles -->
+    <div class="partido-detalles">
+      <p><strong>Ciudad del Evento:</strong> {{ obtenerCiudad(match.equipoLocal) }}</p>
+      <p><strong>Fecha:</strong> {{ match.fechaHora | date:'fullDate' }}</p>
+      <p><strong>Hora:</strong> {{ match.fechaHora | date:'shortTime' }}</p>
+    </div>
+
+    <!-- Imagen -->
+    <img [src]="match.imagenPortada" alt="Portada del partido" class="portada">
+
+    <!-- Tabla -->
+    <div class="tabla-secciones">
+      <h3>Ubicaciones disponibles</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Sección</th>
+            <th>Precio</th>
+            <th>Capacidad Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of sections">
+            <td>{{ s.nombre }}</td>
+            <td>{{ s.precio | currency:'COP' }}</td>
+            <td>{{ s.capacidadTotal | number:'1.0-0' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Formulario -->
+    <form [formGroup]="form" (ngSubmit)="comprar()" class="formulario-compra">
+      <h3>Boletas a comprar</h3>
+
+      <div class="form-group">
+        <input type="number" formControlName="cantidad" min="1" (change)="actualizarCantidadBoletas()" placeholder="Cantidad de boletas">
+      </div>
+
+      <div class="form-group">
+        <label>
+          <input type="checkbox" formControlName="soyElPortador" (change)="soyElPortador = !soyElPortador">
+          Soy el único portador
+        </label>
+      </div>
+
+      <div formArrayName="portadores">
+        <div *ngFor="let p of portadoresArray.controls; let i = index" [formGroupName]="i">
+          <h4>Portador {{ i + 1 }}</h4>
+          <div class="form-group">
+            <select formControlName="sectionId">
+              <option value="">Sección</option>
+              <option *ngFor="let s of sections" [value]="s.id">
+                {{ s.nombre }} - {{ s.precio | currency:'COP' }}
+              </option>
+            </select>
+            <input formControlName="cedula" placeholder="Cédula">
+            <input formControlName="nombre" placeholder="Nombre">
+            <input formControlName="direccion" placeholder="Dirección">
+            <input formControlName="telefono" placeholder="Teléfono">
+            <input formControlName="email" placeholder="Email">
+          </div>
+        </div>
+      </div>
+
+      <div class="resumen">
+        <p><strong>Total a pagar:</strong> {{ calcularTotal() | currency:'COP' }}</p>
+      </div>
+
+      <div class="botones">
+        <button type="submit" [disabled]="form.invalid">Confirmar Compra</button>
+      </div>
+    </form>
+  </div>
+</div>

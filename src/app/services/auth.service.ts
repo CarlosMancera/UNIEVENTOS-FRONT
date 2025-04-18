@@ -7,14 +7,15 @@ import { LoginDTO } from '../dto/LoginDTO';
 import { jwtDecode, JwtPayload } from 'jwt-decode';
 import { ENDPOINTS } from '../core/endpoints';
 
-
 interface User {
+  id: number;
   email: string;
   name: string;
   role: 'user' | 'admin';
 }
 
 interface MyJwtPayload extends JwtPayload {
+  id: number;
   nombre?: string;
   rol?: string;
 }
@@ -50,7 +51,6 @@ export class AuthService {
 
   public logout(): Observable<MensajeDTO> {
     const email = this.getCurrentUser()?.email;
-
     const url = `${ENDPOINTS.iniciarSesion.baseUrl}/close-sesion`;
 
     if (email) {
@@ -72,11 +72,12 @@ export class AuthService {
   public decodeToken(token: string): User {
     const decoded = jwtDecode<MyJwtPayload>(token);
 
-    if (!decoded.sub || !decoded.nombre || !decoded.rol) {
+    if (!decoded.sub || !decoded.nombre || !decoded.rol || decoded.id === undefined) {
       throw new Error('Token inválido: faltan datos del usuario');
     }
 
     const user: User = {
+      id: decoded.id,
       email: decoded.sub,
       name: decoded.nombre,
       role: decoded.rol === 'ADMINISTRADOR' ? 'admin' : 'user',
@@ -119,15 +120,16 @@ export class AuthService {
     }
   }
 
-
   private users = [
     {
+      id: 1,
       email: 'user@email.com',
       password: 'useruser',
       name: 'Usuario Normal',
       role: 'user' as const,
     },
     {
+      id: 2,
       email: 'admin@email.com',
       password: 'admin',
       name: 'Administrador',
@@ -145,5 +147,4 @@ export class AuthService {
     const decoded: any = jwtDecode(token);
     return decoded?.id ?? null;
   }
-
 }

@@ -35,13 +35,12 @@
         <li>
           <a routerLink="/contactenos" routerLinkActive="active">Contactenos</a>
         </li>
-        <li class="cart-icon">
+        <li class="cart-icon" *ngIf="authService.isLoggedIn() && authService.getCurrentUser()?.role === 'user'">
           <a routerLink="/compras">
             <i class="fas fa-shopping-cart"></i>
           </a>
         </li>
 
-        <!-- Si NO hay sesión iniciada se muestra el ícono de usuario que lleva al login -->
         <ng-container *ngIf="!authService.isLoggedIn()">
           <li class="user-icon">
             <a routerLink="/login" routerLinkActive="active">
@@ -50,8 +49,6 @@
           </li>
         </ng-container>
 
-        <!-- Si hay sesión iniciada se muestra el dropdown del usuario -->
-       <!-- Si hay sesión iniciada se muestra el dropdown del usuario -->
       <ng-container *ngIf="authService.isLoggedIn()">
         <li class="user-icon dropdown" (click)="toggleDropdown($event)">
           <a href="javascript:void(0)">

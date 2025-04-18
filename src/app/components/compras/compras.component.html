@@ -5,7 +5,6 @@
     </div>
     <div class="card-body">
       <div class="row">
-        <!-- Detalles del Evento -->
         <div class="col-md-4">
           <div class="mb-4">
             <img [src]="selectedEvent.image" [alt]="selectedEvent.band" class="img-fluid rounded">
@@ -16,7 +15,6 @@
             <p>Lugar: {{ selectedEvent.location }}</p>
             <p>Fecha: {{ selectedEvent.date }}</p>
           </div>
-          <!-- Selección de Localidad y Cantidad -->
           <div class="mt-3">
             <label for="locationSelect">Elegir Localidad</label>
             <select id="locationSelect" formControlName="location" class="form-select">
@@ -34,7 +32,6 @@
           </div>
         </div>
 
-        <!-- Distribución de Localidades -->
         <div class="col-md-4">
           <h3 class="mb-3">Distribución de localidades</h3>
           <div class="seating-chart mb-3">
@@ -56,7 +53,6 @@
           <button class="btn btn-success w-100 mt-3">Ver más Eventos</button>
         </div>
 
-        <!-- Carrito de Compras -->
         <div class="col-md-4">
 currency          <div class="card">
             <div class="card-header">Carrito de Compras</div>
@@ -106,22 +102,22 @@ currency          <div class="card">
           <p>{{ selectedEvent.name }} - Fecha del evento: {{ selectedEvent.date }}</p>
           <p>Escoja el Método de pago</p>
           <div class="d-flex justify-content-center mb-3">
-            <img src="visa.png" alt="Visa" class="img-thumbnail mx-1" 
+            <img src="visa.png" alt="Visa" class="img-thumbnail mx-1"
                  [class.selected]="selectedPaymentMethod === 'Visa'"
                  (click)="selectPaymentMethod('Visa')" style="width: 50px; cursor: pointer;">
-            <img src="visa-electron.png" alt="Visa Electron" class="img-thumbnail mx-1" 
+            <img src="visa-electron.png" alt="Visa Electron" class="img-thumbnail mx-1"
                  [class.selected]="selectedPaymentMethod === 'Visa Electron'"
                  (click)="selectPaymentMethod('Visa Electron')" style="width: 50px; cursor: pointer;">
-            <img src="mastercard.png" alt="MasterCard" class="img-thumbnail mx-1" 
+            <img src="mastercard.png" alt="MasterCard" class="img-thumbnail mx-1"
                  [class.selected]="selectedPaymentMethod === 'MasterCard'"
                  (click)="selectPaymentMethod('MasterCard')" style="width: 50px; cursor: pointer;">
-            <img src="maestro.png" alt="Maestro" class="img-thumbnail mx-1" 
+            <img src="maestro.png" alt="Maestro" class="img-thumbnail mx-1"
                  [class.selected]="selectedPaymentMethod === 'Maestro'"
                  (click)="selectPaymentMethod('Maestro')" style="width: 50px; cursor: pointer;">
-            <img src="transfer.png" alt="Pago por Transferencia" class="img-thumbnail mx-1" 
+            <img src="transfer.png" alt="Pago por Transferencia" class="img-thumbnail mx-1"
                  [class.selected]="selectedPaymentMethod === 'Transferencia'"
                  (click)="selectPaymentMethod('Transferencia')" style="width: 50px; cursor: pointer;">
-            <img src="paypal.png" alt="PayPal" class="img-thumbnail mx-1" 
+            <img src="paypal.png" alt="PayPal" class="img-thumbnail mx-1"
                  [class.selected]="selectedPaymentMethod === 'PayPal'"
                  (click)="selectPaymentMethod('PayPal')" style="width: 50px; cursor: pointer;">
           </div>
@@ -164,16 +160,16 @@ currency          <div class="card">
       <div class="modal-body">
         <p><strong>Información detallada de tu compra</strong></p>
         <p>{{ selectedEvent.name }} - Fecha del evento: {{ selectedEvent.date }}</p>
-        
+
         <p>Localidad: {{ bookingForm.get('location')?.value }}</p>
         <p>Cantidad: {{ bookingForm.get('quantity')?.value }}</p>
         <p>Precio Unitario: {{ getLocationPrice(bookingForm.get('location')?.value) }}</p>
         <p>Descuento: -{{ getDiscountAmount() | currency: 'COP' }}</p>
         <p><strong>Total:</strong> {{ calculateTotal() | currency: 'COP' }}</p>
         <p>Método de pago: {{ selectedPaymentMethod }}</p>
-        
+
         <p class="text-muted">Le hemos enviado a su e-mail un código de validación del pago</p>
-        
+
         <div class="input-group mt-3">
           <input type="text" formControlName="verificationCode" class="form-control" placeholder="Ingresar código">
           <button class="btn btn-primary" (click)="confirmVerification()">Confirmar</button>

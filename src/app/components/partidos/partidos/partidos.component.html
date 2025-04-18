@@ -36,7 +36,7 @@
         <p class="date-location">{{ partido.fechaHora | date: 'medium' }}</p>
         <p class="date-location">{{ partido.descripcion }}</p>
         <span class="badge" *ngIf="partido.estado === 'PROGRAMADO'">PROGRAMADO</span>
-        <button class="buy-button" [routerLink]="['/compras']">Comprar Entradas</button>
+        <button class="buy-button" [routerLink]="['/compras', partido.id]">Comprar Entradas</button>
       </div>
     </div>
   </div>

@@ -12,9 +12,7 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent implements OnInit {
   title = 'UNIEVENTOS';
-  // Variable para controlar el menú móvil
   isMenuOpen = false;
-  // Variable para controlar el dropdown del usuario
   dropdownVisible = false;
   footer = '© 2024 UNIEVENTOS - Todos los derechos reservados';
   usuarioNombre = '';
@@ -30,13 +28,11 @@ export class AppComponent implements OnInit {
   }
 
 
-  // Alterna el menú móvil y evita que el clic se propague
   toggleMenu(event: Event): void {
     event.stopPropagation();
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  // Alterna el dropdown del usuario y evita que el clic se propague
   toggleDropdown(event: Event): void {
     event.stopPropagation();
     this.dropdownVisible = !this.dropdownVisible;

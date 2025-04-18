@@ -43,5 +43,7 @@ export const ENDPOINTS = {
   obtenerSection: new Endpoint(URL_BASE, 'secciones/{id}', true),
   listarSectionsPorMatch: new Endpoint(URL_BASE, 'secciones/por-partido/{matchId}', true),
 
+  crearTicket: new Endpoint(URL_BASE, 'tickets', true),
+
 
 };

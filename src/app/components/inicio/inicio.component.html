@@ -21,7 +21,7 @@
 
           <div class="event-buttons">
             <span class="disponible-badge">{{ partido.estado }}</span>
-            <button class="buy-button" [routerLink]="['/compras']">Comprar Entradas</button>
+            <button class="buy-button" [routerLink]="['/compras', partido.id]">Comprar Entradas</button>
           </div>
         </div>
       </div>

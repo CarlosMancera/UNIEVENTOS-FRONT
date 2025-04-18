@@ -21,6 +21,7 @@ import { EquipoAdminComponent } from './pages/admin/equipo-admin/equipo-admin.co
 import { MatchAdminComponent } from './components/admin/match-admin/match-admin.component';
 import { MatchCrearComponent } from './components/admin/match-crear/match-crear.component';
 import { PartidosComponent } from './components/partidos/partidos/partidos.component';
+import { CompraBoletaComponent } from './pages/compra-boleta.component';
 
 
 export const routes: Routes = [
@@ -32,6 +33,7 @@ export const routes: Routes = [
    { path: 'registro', component: RegistroComponent },
    { path: 'partidos', component: PartidosComponent},
    { path: 'compras', component: ComprasComponent},
+   { path: 'compras/:id', component: CompraBoletaComponent},
    { path: 'admin', component: AdminComponent,
       children: [
          { path: '', redirectTo: 'datos', pathMatch: 'full' },
