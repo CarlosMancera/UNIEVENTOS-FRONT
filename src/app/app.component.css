@@ -163,8 +163,8 @@ html, body {
 
 /* === MAIN FIX (Espacio para header y separación de footer) === */
 .main-content {
-  padding-top: 140px; /* más espacio si el header tiene padding interno */
-  padding-bottom: 60px; /* espacio visual antes del footer */
+  padding-top: 70px; /* más espacio si el header tiene padding interno */
+  padding-bottom: 00px; /* espacio visual antes del footer */
   min-height: calc(100vh - 140px - 160px); /* asegura altura visible completa */
 }
 

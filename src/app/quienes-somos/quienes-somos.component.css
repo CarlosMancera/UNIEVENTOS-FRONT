@@ -1,0 +1,92 @@
+/* === QUIENES SOMOS SECTION === */
+.quienes-somos {
+  background: linear-gradient(180deg, #1b1b2f, #16213e);
+  color: #f5f5f5;
+  padding: 4rem 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+  border-top: 3px solid #ffd700;
+}
+
+.quienes-somos .container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.quienes-somos .logo {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  margin-bottom: 1rem;
+}
+
+.quienes-somos h1 {
+  font-size: 2.5rem;
+  color: #ffd700;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.quienes-somos h2 {
+  font-size: 2rem;
+  color: #ffca28;
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+.quienes-somos p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  color: #ddd;
+}
+
+.features {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.feature {
+  background: #2f2f4f;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  width: 300px;
+}
+
+.feature h3 {
+  font-size: 1.3rem;
+  color: #ffd700;
+  margin-bottom: 0.5rem;
+}
+
+.feature p {
+  font-size: 1rem;
+  color: #ccc;
+}
+
+.steps {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+  text-align: left;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.steps li {
+  margin: 0.7rem 0;
+  font-size: 1.05rem;
+  background: rgba(255, 215, 0, 0.1);
+  padding: 0.6rem 1rem;
+  border-left: 4px solid #ffd700;
+  border-radius: 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}

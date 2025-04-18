@@ -67,4 +67,15 @@ export class RegistroComponent {
       }
     });
   }
+
+  campos = [
+    { name: 'cedula', placeholder: 'Cédula', type: 'text', icon: 'id-card.png' },
+    { name: 'nombre', placeholder: 'Nombre Completo', type: 'text', icon: 'user1.png' },
+    { name: 'direccion', placeholder: 'Dirección', type: 'text', icon: 'location.png' },
+    { name: 'telefono', placeholder: 'Teléfono', type: 'tel', icon: 'phone.png' },
+    { name: 'email', placeholder: 'Correo Electrónico', type: 'email', icon: 'email.png' },
+    { name: 'password', placeholder: 'Contraseña', type: 'password', icon: 'password.png' },
+    { name: 'confirmaPassword', placeholder: 'Repetir Contraseña', type: 'password', icon: 'password.png' }
+  ];
+
 }

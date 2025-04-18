@@ -3,7 +3,7 @@
   <div class="sidebar">
     <nav>
       <ul>
-        <li><a href="/eventos">Eventos</a></li>
+        <li><a href="/partidos">Partidos</a></li>
         <li><a href="/quienes-somos">Quiénes Somos</a></li>
         <li><a href="/contactenos">Contáctanos</a></li>
 
@@ -18,7 +18,6 @@
     </nav>
   </div>
 
-  <!-- Formulario de inicio de sesión -->
   <div class="login-form">
     <h2>Iniciar Sesión</h2>
     <form (ngSubmit)="onSubmit()">
@@ -49,7 +48,6 @@
       <button type="submit" class="login-button">Iniciar Sesión</button>
 
       <div class="form-links">
-        <!-- Ahora usamos MatDialog para mostrar el modal -->
         <a class="forgot-password" (click)="openForgotPasswordModal()">¿Olvidó su contraseña?</a>
         <p class="register-link">¿No tiene una cuenta? <a href="/registro">Regístrese</a></p>
       </div>

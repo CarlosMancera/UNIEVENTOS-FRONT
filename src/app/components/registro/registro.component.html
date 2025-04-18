@@ -1,107 +1,49 @@
 <div class="registro-container">
+  <!-- Sidebar -->
   <div class="sidebar">
     <nav>
       <ul>
-        <li><a href="/eventos">Eventos</a></li>
+        <li><a href="/partidos">Partidos</a></li>
         <li><a href="/quienes-somos">Quienes Somos</a></li>
         <li><a href="/contactanos">Contáctanos</a></li>
-        <li><a href="/donde-estamos">Donde Estamos</a></li>
         <li class="siguenos">
           <span>Síguenos</span>
           <div class="social-icons">
-            <a href="#" class="facebook-icon"><img src="facebook.png" alt="Facebook"></a>
-            <a href="#" class="twitter-icon"><img src="twitter.png" alt="Twitter"></a>
-            <a href="#" class="instagram-icon"><img src="instagram.png" alt="Instagram"></a>
+            <a href="#"><img src="facebook.png" alt="Facebook"></a>
+            <a href="#"><img src="twitter.png" alt="Twitter"></a>
+            <a href="#"><img src="instagram.png" alt="Instagram"></a>
           </div>
         </li>
       </ul>
     </nav>
   </div>
 
+  <!-- Registro Formulario -->
   <div class="registro-form">
-    <h2>Registrarme con</h2>
+    <h2>Crear Cuenta</h2>
     <form [formGroup]="registroForm" (ngSubmit)="registrar()" novalidate>
-      <div class="form-group">
+      <div class="form-group" *ngFor="let field of campos">
         <div class="input-icon">
-          <img src="id-card.png" alt="Cédula icon">
-          <input 
-            type="text" 
-            formControlName="cedula" 
-            placeholder="Cédula">
+          <img [src]="field.icon" [alt]="field.placeholder">
+          <input
+            [type]="field.type"
+            [formControlName]="field.name"
+            [placeholder]="field.placeholder">
         </div>
       </div>
 
-      <div class="form-group">
-        <div class="input-icon">
-          <img src="user1.png" alt="Usuario icon">
-          <input 
-            type="text" 
-            formControlName="nombre" 
-            placeholder="Nombre Completo">
-        </div>
+      <div *ngIf="registroForm.hasError('passwordsMismatch')" class="error-message">
+        Las contraseñas no coinciden
       </div>
-
-      <div class="form-group">
-        <div class="input-icon">
-          <img src="location.png" alt="Dirección icon">
-          <input 
-            type="text" 
-            formControlName="direccion" 
-            placeholder="Dirección">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="input-icon">
-          <img src="phone.png" alt="Teléfono icon">
-          <input 
-            type="tel" 
-            formControlName="telefono" 
-            placeholder="Teléfono">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="input-icon">
-          <img src="email.png" alt="Email icon">
-          <input 
-            type="email" 
-            formControlName="email" 
-            placeholder="Correo Electrónico">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="input-icon">
-          <img src="password.png" alt="Password icon">
-          <input 
-            type="password" 
-            formControlName="password" 
-            placeholder="Contraseña">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <div class="input-icon">
-          <img src="password.png" alt="Password icon">
-          <input 
-            type="password" 
-            formControlName="confirmaPassword" 
-            placeholder="Repetir Contraseña">
-        </div>
-      </div>
-
-      @if (registroForm.hasError('passwordsMismatch')) {
-        <div class="error-message">Las contraseñas no coinciden</div>
-      }
 
       <button type="submit" class="register-button" [disabled]="registroForm.invalid">
         Registrar Cuenta
       </button>
 
       <div class="login-link">
-        Ya tiene una cuenta? <a href="/login">Iniciar Sesión</a>
+        ¿Ya tienes una cuenta? <a href="/login">Iniciar Sesión</a>
       </div>
     </form>
   </div>
 </div>
+
