@@ -18,6 +18,8 @@ import { QuienesSomosComponent } from './quienes-somos/quienes-somos.component';
 import { ConntactenosComponent } from './conntactenos/conntactenos.component';
 import { ActualizarPasswordComponent } from './actualizar-password/actualizar-password.component';
 import { EquipoAdminComponent } from './pages/admin/equipo-admin/equipo-admin.component';
+import { MatchAdminComponent } from './components/admin/match-admin/match-admin.component';
+import { MatchCrearComponent } from './components/admin/match-crear/match-crear.component';
 
 
 export const routes: Routes = [
@@ -37,7 +39,9 @@ export const routes: Routes = [
          { path: 'crear-cupon', component: CrearCuponComponent },
          { path: 'cupon-admin', component: CuponAdminComponent },
          { path: 'equipo-admin', component: EquipoAdminComponent },
-
+         { path: 'partido-admin', component: MatchAdminComponent },
+         { path: 'crear-partido', component: MatchCrearComponent },
+         { path: 'editar-partido/:id', component: MatchCrearComponent },
        ]
    },
    { path: 'user', component: UserComponent,

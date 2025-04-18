@@ -31,4 +31,17 @@ export const ENDPOINTS = {
   subirImagen: new Endpoint(URL_BASE, 'imagenes', true),
 
 
+  crearMatch: new Endpoint(URL_BASE, 'partidos', true),
+  obtenerMatch: new Endpoint(URL_BASE, 'partidos/{id}', true),
+  actualizarMatch: new Endpoint(URL_BASE, 'partidos/{id}', true),
+  eliminarMatch: new Endpoint(URL_BASE, 'partidos/{id}', true),
+  listarMatch: new Endpoint(URL_BASE, 'partidos', true),
+
+  crearSection: new Endpoint(URL_BASE, 'secciones', true),
+  actualizarSection: new Endpoint(URL_BASE, 'secciones/{id}', true),
+  eliminarSection: new Endpoint(URL_BASE, 'secciones/{id}', true),
+  obtenerSection: new Endpoint(URL_BASE, 'secciones/{id}', true),
+  listarSectionsPorMatch: new Endpoint(URL_BASE, 'secciones/por-partido/{matchId}', true),
+
+
 };

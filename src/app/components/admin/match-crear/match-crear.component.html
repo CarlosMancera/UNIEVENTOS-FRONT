@@ -1,0 +1,86 @@
+<div class="crear-partido-container">
+  <h2>{{ match.id ? 'Editar Partido' : 'Crear Partido' }}</h2>
+
+  <form (ngSubmit)="guardarTodo()" class="formulario">
+    <div class="equipo-row">
+      <div class="equipo-box">
+        <label>Equipo Local:</label>
+        <select [(ngModel)]="match.equipoLocal" name="equipoLocal" required>
+          <option [ngValue]="null">-- Seleccionar --</option>
+          <option *ngFor="let equipo of equipos" [value]="equipo.nombre" [disabled]="equipo.nombre === match.equipoVisitante">
+            {{ equipo.nombre }}
+          </option>
+        </select>
+        <img *ngIf="getEscudo(match.equipoLocal)" [src]="getEscudo(match.equipoLocal)" alt="Escudo local" class="preview-escudo">
+      </div>
+
+      <div class="equipo-box">
+        <label>Equipo Visitante:</label>
+        <select [(ngModel)]="match.equipoVisitante" name="equipoVisitante" required>
+          <option [ngValue]="null">-- Seleccionar --</option>
+          <option *ngFor="let equipo of equipos" [value]="equipo.nombre" [disabled]="equipo.nombre === match.equipoLocal">
+            {{ equipo.nombre }}
+          </option>
+        </select>
+        <img *ngIf="getEscudo(match.equipoVisitante)" [src]="getEscudo(match.equipoVisitante)" alt="Escudo visitante" class="preview-escudo">
+      </div>
+    </div>
+
+    <label>Fecha y Hora:</label>
+    <input type="datetime-local" [(ngModel)]="match.fechaHora" name="fechaHora" required>
+
+    <label>Estado:</label>
+    <select [(ngModel)]="match.estado" name="estado">
+      <option value="PROGRAMADO">Programado</option>
+      <option value="EN_JUEGO">En Juego</option>
+      <option value="FINALIZADO">Finalizado</option>
+      <option value="CANCELADO">Cancelado</option>
+    </select>
+
+    <label>Tipo de Evento:</label>
+    <input type="text" [(ngModel)]="match.tipoEvento" name="tipoEvento">
+
+    <label>Descripción:</label>
+    <textarea [(ngModel)]="match.descripcion" name="descripcion"></textarea>
+
+    <label>Imagen de Portada:</label>
+    <input type="file" (change)="onFileChange($event)">
+    <img *ngIf="match.imagenPortada" [src]="match.imagenPortada" class="preview-portada" alt="Imagen actual" />
+
+    <button type="submit" class="btn-guardar">💾 Guardar Partido</button>
+  </form>
+
+  <div *ngIf="match.id" class="secciones-container">
+    <h3>🎟️ Secciones del Estadio</h3>
+
+    <form (ngSubmit)="agregarSeccion()" class="form-seccion">
+      <div class="campo-seccion">
+        <label>Nombre de la sección</label>
+        <input [(ngModel)]="nuevaSeccion.nombre" name="nombreSeccion">
+      </div>
+
+      <div class="campo-seccion">
+        <label>Capacidad</label>
+        <input type="number" [(ngModel)]="nuevaSeccion.capacidadTotal" name="capacidadTotal">
+      </div>
+
+      <div class="campo-seccion">
+        <label>Precio</label>
+        <input type="number" [(ngModel)]="nuevaSeccion.precio" name="precio">
+      </div>
+
+      <button type="submit" class="btn-agregar">➕ Agregar Sección</button>
+    </form>
+
+    <ul class="lista-secciones">
+      <li *ngFor="let seccion of secciones">
+        <div>
+          <strong>{{ seccion.nombre }}</strong> | Capacidad: {{ seccion.capacidadTotal }} | 💵 ${{ seccion.precio }}
+        </div>
+        <button (click)="eliminarSeccion(seccion.id!)" class="btn-eliminar">🗑️</button>
+      </li>
+    </ul>
+  </div>
+  <button class="btn-volver" (click)="volver()">⬅️ Volver a la administración</button>
+
+</div>

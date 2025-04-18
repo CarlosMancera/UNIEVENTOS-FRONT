@@ -1,0 +1,31 @@
+<div class="match-admin-container">
+  <h2>Gestión de Partidos</h2>
+
+  <button (click)="crear()" class="btn-crear">+ Crear nuevo partido</button>
+
+  <table class="match-table">
+    <thead>
+      <tr>
+        <th>Equipo Local</th>
+        <th>Equipo Visitante</th>
+        <th>Fecha y Hora</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let match of partidos">
+        <td>{{ match.equipoLocal }}</td>
+        <td>{{ match.equipoVisitante }}</td>
+        <td>{{ match.fechaHora | date:'short' }}</td>
+        <td>
+          <span class="badge" [ngClass]="match.estado.toLowerCase()">{{ match.estado }}</span>
+        </td>
+        <td>
+          <button (click)="editar(match.id!)" class="btn-accion editar">✏️</button>
+          <button (click)="eliminar(match.id!)" class="btn-accion eliminar">🗑️</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

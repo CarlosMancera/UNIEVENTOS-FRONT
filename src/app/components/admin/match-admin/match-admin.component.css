@@ -1,0 +1,103 @@
+.match-admin-container {
+  padding: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.match-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.match-table th {
+  background-color: #f5f5f5;
+  padding: 12px;
+  font-weight: bold;
+  border-bottom: 2px solid #ccc;
+}
+
+.match-table td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+.btn-crear {
+  display: block;
+  margin: 0 auto 20px auto;
+  padding: 10px 20px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-crear:hover {
+  background-color: #155fa0;
+}
+
+.btn-accion {
+  padding: 6px 12px;
+  margin: 0 4px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-accion.editar {
+  background-color: #ffb300;
+  color: #fff;
+}
+
+.btn-accion.eliminar {
+  background-color: #d32f2f;
+  color: #fff;
+}
+
+.btn-accion.editar:hover {
+  background-color: #f57c00;
+}
+
+.btn-accion.eliminar:hover {
+  background-color: #b71c1c;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  display: inline-block;
+}
+
+.badge.programado {
+  background-color: #1976d2;
+}
+
+.badge.en_juego {
+  background-color: #388e3c;
+}
+
+.badge.finalizado {
+  background-color: #616161;
+}
+
+.badge.cancelado {
+  background-color: #d32f2f;
+}
