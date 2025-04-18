@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>{{ equipo.id ? 'Editar' : 'Crear' }} Equipo</h2>
+
+<div mat-dialog-content>
+  <form>
+    <mat-form-field class="full-width">
+      <mat-label>Nombre</mat-label>
+      <input matInput [(ngModel)]="equipo.nombre" name="nombre">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Ciudad</mat-label>
+      <input matInput [(ngModel)]="equipo.ciudad" name="ciudad">
+    </mat-form-field>
+
+    <mat-form-field class="full-width">
+      <mat-label>Entrenador</mat-label>
+      <input matInput [(ngModel)]="equipo.entrenador" name="entrenador">
+    </mat-form-field>
+
+    <div class="imagen-section">
+      <label>Escudo (opcional)</label>
+      <input type="file" (change)="onFileChange($event)">
+      <div *ngIf="equipo.escudoUrl">
+        <p>Previsualización:</p>
+        <img [src]="equipo.escudoUrl" width="80">
+      </div>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="subirImagenYGuardar()">
+    {{ equipo.id ? 'Actualizar' : 'Crear' }}
+  </button>
+</div>

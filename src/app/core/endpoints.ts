@@ -23,16 +23,12 @@ export const ENDPOINTS = {
   editarCuenta: new Endpoint(URL_AUTH_AUX, 'editar-perfil', true),
   eliminarCuenta: new Endpoint(URL_AUTH_AUX, 'eliminar-cuenta/{id}', true),
 
-  // === NUEVO ENDPOINT PARA ARTISTAS ===
-  crearArtista: new Endpoint(URL_BASE, 'api/administrador/crear-artista', true),
-  listarArtistas: new Endpoint(URL_BASE, 'api/administrador/listar-artista', true),
-  editarArtista: new Endpoint(URL_BASE, 'api/administrador/editar-artista', true),
-  eliminarArtista: new Endpoint(URL_BASE, 'api/administrador/eliminar-artista/{id}', true),
-  crearEvento: new Endpoint(URL_BASE, 'api/administrador/crear-evento', true),
-  agregarImagenEvento: new Endpoint(URL_BASE,'api/administrador/agregar-imagen/{idEvento}',true),
-  agregarImagenLocalidad: new Endpoint(URL_BASE, 'api/administrador/agregar-imagen-localidad/{idEvento}/{nombreLocalidad}',true
-  ),
-
+  crearEquipo: new Endpoint(URL_BASE, 'equipos', true),
+  obtenerEquipo: new Endpoint(URL_BASE, 'equipos/{id}', true),
+  actualizarEquipo: new Endpoint(URL_BASE, 'equipos/{id}', true),
+  eliminarEquipo: new Endpoint(URL_BASE, 'equipos/{id}', true),
+  listarEquipos: new Endpoint(URL_BASE, 'equipos', true),
+  subirImagen: new Endpoint(URL_BASE, 'imagenes', true),
 
 
 };
