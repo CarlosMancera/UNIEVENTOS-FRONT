@@ -5,6 +5,7 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CrearCuentaDTO } from '../../dto/cuentaDTO/CrearCuentaDTO';
 import Swal from 'sweetalert2';
+import { BcLoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-registro',
@@ -17,7 +18,7 @@ export class RegistroComponent {
 
   registroForm!: FormGroup;
 
-  constructor(private router: Router,
+  constructor(private router: Router, private bcLoadingService: BcLoadingService,
   private authService: AuthService, private formBuilder: FormBuilder) {
     this.crearFormulario();
   }
@@ -40,13 +41,13 @@ export class RegistroComponent {
     const password = formGroup.get('password')?.value;
     const confirmaPassword = formGroup.get('confirmaPassword')?.value;
 
-    // Si las contraseñas no coinciden, devuelve un error, de lo contrario, null
     return password === confirmaPassword ? null : { passwordsMismatch: true };
   }
 
   public registrar() {
-    const crearCuenta = this.registroForm.value as CrearCuentaDTO; // Cambiar a CrearCuentaDTO si ese es el correcto
+    this.bcLoadingService.show('Cargando datos...');
 
+    const crearCuenta = this.registroForm.value as CrearCuentaDTO;
     this.authService.crearCuenta(crearCuenta).subscribe({
       next: (data) => {
         Swal.fire({
@@ -56,8 +57,10 @@ export class RegistroComponent {
           confirmButtonText: 'Aceptar'
         });
         this.router.navigate(['/']);
+        this.bcLoadingService.close();
       },
       error: (error) => {
+        this.bcLoadingService.close();
         Swal.fire({
           title: 'Error',
           text: error.error.respuesta,

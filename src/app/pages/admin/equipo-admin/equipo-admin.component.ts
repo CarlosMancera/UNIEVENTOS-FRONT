@@ -9,6 +9,7 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { Team } from '../../../models/team.model';
 import { ModalEquipoComponent } from '../../../shared/modals/modal-equipo/modal-equipo.component';
 import { TeamService } from '../../../services/Team.service';
+import { BcLoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-equipo-admin',
@@ -32,7 +33,8 @@ export class EquipoAdminComponent implements OnInit {
   constructor(
     private teamService: TeamService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private bcLoadingService: BcLoadingService
   ) {}
 
   ngOnInit(): void {
@@ -58,8 +60,10 @@ export class EquipoAdminComponent implements OnInit {
   }
 
   eliminar(id: number) {
+    this.bcLoadingService.show('Cargando datos...');
     this.teamService.eliminar(id).subscribe(() => {
       this.cargarEquipos();
+      this.bcLoadingService.close();
       this.snackBar.open('Equipo eliminado', 'Cerrar', { duration: 3000 });
     });
   }

@@ -8,6 +8,7 @@ import { LoginDTO } from '../../dto/LoginDTO';
 import { TokenService } from '../../services/token.service';
 import { ForgotPasswordDialogComponent } from '../shared/forgot-password-dialog/forgot-password-dialog.component';
 import Swal from 'sweetalert2';
+import { BcLoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-login',
@@ -27,10 +28,12 @@ export class LoginComponent {
     private router: Router,
     private authService: AuthService,
     private tokenService: TokenService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private bcLoadingService: BcLoadingService
   ) {}
 
   onSubmit() {
+    this.bcLoadingService.show('Cargando datos...');
     this.authService.iniciarSesion(this.loginData).subscribe({
       next: (data) => {
         if (data.error) {
@@ -49,8 +52,10 @@ export class LoginComponent {
         } else {
           this.router.navigate(['/']);
         }
+        this.bcLoadingService.close();
       },
       error: (error) => {
+        this.bcLoadingService.close();
         Swal.fire('Error', error?.error?.respuesta || 'Error en la solicitud', 'error');
       }
     });

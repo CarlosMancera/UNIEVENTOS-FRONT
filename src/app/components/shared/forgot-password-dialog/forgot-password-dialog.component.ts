@@ -7,6 +7,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
+import { BcLoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-forgot-password-dialog',
@@ -29,10 +30,12 @@ export class ForgotPasswordDialogComponent {
     private dialogRef: MatDialogRef<ForgotPasswordDialogComponent>,
     private authService: AuthService,
     private router: Router,
+    private bcLoadingService: BcLoadingService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   sendRecoveryEmail() {
+    this.bcLoadingService.show('Cargando datos...');
     if (!this.correo) {
       this.message = 'Por favor, ingrese un correo electrónico válido.';
       this.success = false;
@@ -49,8 +52,10 @@ export class ForgotPasswordDialogComponent {
             queryParams: { correo: this.correo }
           });
         }, 2000);
+        this.bcLoadingService.close();
       },
       error: () => {
+        this.bcLoadingService.close();
         this.success = false;
         this.message = '❌ Error al enviar el correo. Intente de nuevo.';
       }

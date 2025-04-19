@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { Team } from '../../../models/team.model';
 import { TeamService } from '../../../services/Team.service';
 import { ImagenService } from '../../../services/ImagenService.service';
+import { BcLoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-modal-equipo',
@@ -40,6 +41,7 @@ export class ModalEquipoComponent {
     private teamService: TeamService,
     private http: HttpClient,
     private imagenService: ImagenService,
+    private bcLoadingService: BcLoadingService
 
   ) {
     if (data) {
@@ -52,6 +54,7 @@ export class ModalEquipoComponent {
   }
 
   subirImagenYGuardar(): void {
+    this.bcLoadingService.show('Cargando datos...');
     if (!this.imagenSeleccionada) {
       this.guardarEquipo();
       return;
@@ -64,6 +67,7 @@ export class ModalEquipoComponent {
       },
       error: () => {
         alert('Error al subir la imagen');
+        this.bcLoadingService.close();
       }
     });
   }
@@ -74,6 +78,7 @@ export class ModalEquipoComponent {
     } else {
       this.teamService.crear(this.equipo).subscribe(() => this.ref.close(true));
     }
+    this.bcLoadingService.close();
   }
 
   cancelar(): void {

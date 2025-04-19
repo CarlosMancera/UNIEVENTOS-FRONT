@@ -2,11 +2,12 @@ import { Component, OnInit, HostListener } from '@angular/core';
 import { RouterOutlet, RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
+import { BcLoadingComponent } from './components/bc-loading/bc-loading.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterModule, CommonModule],
+  imports: [RouterOutlet, RouterModule, CommonModule, BcLoadingComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

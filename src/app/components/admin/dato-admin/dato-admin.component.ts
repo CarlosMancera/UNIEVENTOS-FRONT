@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
 import { HttpClientService } from '../../../services/HttpClientService.service';
 import { ENDPOINTS } from '../../../core/endpoints';
+import { BcLoadingService } from '../../../services/loading.service';
 
 @Component({
   selector: 'app-dato-admin',
@@ -27,10 +28,12 @@ export class DatoAdminComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private httpClientService: HttpClientService
+    private httpClientService: HttpClientService,
+    private bcLoadingService: BcLoadingService
   ) {}
 
   ngOnInit(): void {
+    this.bcLoadingService.show('Cargando datos...');
     const userId = this.authService.getUserIdFromToken();
     if (!userId) {
       alert('No se pudo obtener el ID del usuario.');
@@ -52,10 +55,12 @@ export class DatoAdminComponent implements OnInit {
           confirmarContrasena: ''
         };
         this.isEditing = false;
+        this.bcLoadingService.close();
       },
       error: (err) => {
         console.error('Error al obtener información del administrador:', err);
         alert('Error al obtener información del administrador.');
+        this.bcLoadingService.close();
       }
     });
   }
@@ -65,6 +70,8 @@ export class DatoAdminComponent implements OnInit {
   }
 
   eliminarAdmin() {
+    this.bcLoadingService.show('Cargando datos...');
+
     if (!confirm('¿Está seguro que desea eliminar este administrador? Esta acción no se puede deshacer.')) return;
 
     const userId = this.authService.getUserIdFromToken();
@@ -83,15 +90,21 @@ export class DatoAdminComponent implements OnInit {
         localStorage.removeItem('currentUser');
         this.authService['currentUserSubject'].next(null);
         window.location.href = '/login';
+        this.bcLoadingService.close();
+
       },
       error: (err) => {
         console.error('Error al eliminar la cuenta:', err);
         alert('Error al eliminar la cuenta: ' + (err.error?.mensaje || err.message));
+        this.bcLoadingService.close();
+
       }
     });
   }
 
   guardarCambios() {
+    this.bcLoadingService.show('Cargando datos...');
+
     const userId = this.authService.getUserIdFromToken();
     if (!userId) {
       alert('No se pudo obtener el ID del usuario.');
@@ -116,6 +129,8 @@ export class DatoAdminComponent implements OnInit {
       next: () => {
         alert('Cambios guardados exitosamente');
         this.isEditing = false;
+        this.bcLoadingService.close();
+
       },
       error: (err) => {
         console.error('Error al actualizar:', err);
@@ -123,6 +138,7 @@ export class DatoAdminComponent implements OnInit {
           'Error al actualizar el administrador: ' +
           (err.error?.mensaje ? err.error.mensaje : err.message)
         );
+        this.bcLoadingService.close();
       }
     });
   }
