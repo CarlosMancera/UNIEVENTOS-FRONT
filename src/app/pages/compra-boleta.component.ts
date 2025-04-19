@@ -13,6 +13,7 @@ import { ENDPOINTS } from '../core/endpoints';
 import { Team } from '../models/team.model';
 import { TeamService } from '../services/Team.service';
 import { CuentaService } from '../services/cuenta.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-compra-boleta',
@@ -37,8 +38,20 @@ export class CompraBoletaComponent implements OnInit {
     nuevaContrasena: '',
     confirmarContrasena: ''
   };
+  codigoVerificacionGenerado: string = '';
 
   isEditing = false;
+
+  // Pasarela de pago
+  showPaymentModal: boolean = false;
+  showVerificationModal: boolean = false;
+  showSuccessModal: boolean = false;
+  paymentForm!: FormGroup;
+  verificationCode: string = '';
+  selectedPaymentMethod: string = '';
+  cardNumberError: boolean = false;
+  verificationForm!: FormGroup;
+  selectedEvent: any = {}; // usado por modales
 
   constructor(
     private route: ActivatedRoute,
@@ -49,16 +62,34 @@ export class CompraBoletaComponent implements OnInit {
     private authService: AuthService,
     private http: HttpClientService,
     private router: Router,
-    private teamService: TeamService
+    private teamService: TeamService,
+    private cd: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-
     if (!this.authService.isLoggedIn()) {
       alert('Debes iniciar sesión para continuar.');
       this.router.navigate(['/login']);
       return;
     }
+
+    this.verificationForm = this.fb.group({
+      verificationCode: ['', Validators.required]
+    });
+
+
+    this.paymentForm = this.fb.group({
+      cardHolder: ['', Validators.required],
+      cardNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^([0-9]{4}\\s?){4}$')
+        ]
+      ],
+      expiryDate: ['', [Validators.required, Validators.pattern('^(0[1-9]|1[0-2])\/?([0-9]{2})$')]],
+      cvv: ['', [Validators.required, Validators.pattern('^[0-9]{3,4}$')]],
+    });
 
     const userId = this.authService.getUserIdFromToken();
     if (!userId) {
@@ -88,12 +119,12 @@ export class CompraBoletaComponent implements OnInit {
       }
     });
 
-
     const matchId = Number(this.route.snapshot.paramMap.get('id'));
 
     this.matchService.obtener(matchId).subscribe({
       next: (data) => {
         this.match = data;
+        this.selectedEvent = { name: `${data.equipoLocal} vs ${data.equipoVisitante}`, date: data.fechaHora };
         this.cargarSecciones(data.id!);
       },
       error: () => {
@@ -149,21 +180,40 @@ export class CompraBoletaComponent implements OnInit {
 
   calcularTotal(): number {
     return this.portadoresArray.controls.reduce((total, p) => {
-      const sectionId = p.get('sectionId')?.value;
-      const section = this.sections.find(s => s.id == sectionId);
+      const sectionId = +p.get('sectionId')?.value;
+      const section = this.sections.find(s => s.id === sectionId);
       return total + (section?.precio || 0);
     }, 0);
   }
 
-  comprar(): void {
-    if (this.form.invalid || !this.match) return;
+  isPaymentFormValid(): boolean {
+    const rawCardNumber = this.paymentForm.get('cardNumber')?.value || '';
+    const cardNumber = rawCardNumber.replace(/\s/g, '');
+    this.cardNumberError = cardNumber.length !== 16;
+    const resultado = this.paymentForm.valid && this.selectedPaymentMethod !== '' && !this.cardNumberError;
+    return resultado;
+  }
 
-    const cuentaId = this.authService.getUserIdFromToken();
-    if (!cuentaId) {
-      alert('Error: Usuario no autenticado.');
-      this.router.navigate(['/login']);
+
+  comprar(): void {
+    this.showPaymentModal = true;
+  }
+
+  confirmVerification(): void {
+    const inputCode = this.verificationForm.get('verificationCode')?.value?.trim().toUpperCase();
+    const expectedCode = this.codigoVerificacionGenerado;
+
+    console.log('🧾 Código ingresado:', inputCode);
+    console.log('✅ Código generado:', expectedCode);
+
+    if (inputCode !== expectedCode) {
+      alert('❌ El código ingresado no es válido. Por favor verifica tu correo e intenta nuevamente.');
       return;
     }
+
+    // El resto igual...
+    const cuentaId = this.authService.getUserIdFromToken();
+    if (!cuentaId || !this.match) return;
 
     const portadores = this.portadoresArray.getRawValue();
 
@@ -179,26 +229,40 @@ export class CompraBoletaComponent implements OnInit {
         emailPortador: p.email
       };
 
-      this.http.post(ENDPOINTS.crearTicket, ticket).subscribe({
-        next: () => {},
-        error: (err) => {
-          alert('Error al realizar la compra: ' + (err.error?.mensaje || 'Error interno'));
-        }
-      });
+      this.http.post(ENDPOINTS.crearTicket, ticket).subscribe();
     }
 
-    alert('Compra realizada. Se han enviado los tickets.');
+    this.showVerificationModal = false;
+    this.showSuccessModal = true;
+  }
+
+  closePaymentModal(): void {
+    this.showPaymentModal = false;
+    this.paymentForm.reset();
+    this.selectedPaymentMethod = '';
+    this.cardNumberError = false;
+  }
+
+  closeVerificationModal(): void {
+    this.showVerificationModal = false;
+  }
+
+  closeSuccessModal(): void {
+    this.showSuccessModal = false;
     this.router.navigate(['/']);
   }
 
-  obtenerEscudo(nombre: string): string {
-    const equipo = this.equipos.find(e => e.nombre === nombre);
-    return equipo?.escudoUrl || 'default.png';
+  selectPaymentMethod(method: string): void {
+    this.selectedPaymentMethod = method;
   }
 
-  obtenerCiudad(nombre: string): string {
-    const equipo = this.equipos.find(e => e.nombre === nombre);
-    return equipo?.ciudad || 'Ciudad desconocida';
+  getLocationPrice(sectionId: string): string {
+    const section = this.sections.find(s => s.id === +sectionId);
+    return section?.precio?.toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) || 'COP 0';
+  }
+
+  getDiscountAmount(): number {
+    return this.calcularTotal() * 0.2;
   }
 
   onTogglePortador(index: number): void {
@@ -252,6 +316,81 @@ export class CompraBoletaComponent implements OnInit {
     grupo.get('direccion')?.enable();
     grupo.get('telefono')?.enable();
     grupo.get('email')?.enable();
+  }
+
+  obtenerEscudo(nombre: string): string {
+    const equipo = this.equipos.find(e => e.nombre === nombre);
+    return equipo?.escudoUrl || 'default.png';
+  }
+
+  obtenerCiudad(nombre: string): string {
+    const equipo = this.equipos.find(e => e.nombre === nombre);
+    return equipo?.ciudad || 'Ciudad desconocida';
+  }
+
+  onCardNumberInput(): void {
+    const control = this.paymentForm.get('cardNumber');
+    const rawValue = control?.value || '';
+    const digits = rawValue.replace(/\D/g, '').slice(0, 16);
+    const formatted = digits.replace(/(.{4})/g, '$1 ').trim();
+    control?.setValue(formatted, { emitEvent: false });
+    this.cardNumberError = digits.length !== 16;
+    this.cd.detectChanges();
+  }
+
+
+  onExpiryDateInput(): void {
+    const control = this.paymentForm.get('expiryDate');
+    let value = control?.value || '';
+    value = value.replace(/\D/g, '');
+    if (value.length > 2) {
+      value = value.slice(0, 2) + '/' + value.slice(2, 4);
+    }
+    control?.setValue(value, { emitEvent: false });
+  }
+
+  onCardHolderInput(): void {
+    const control = this.paymentForm.get('cardHolder');
+    let value: string = control?.value || '';
+
+    value = value.toUpperCase();
+
+    control?.setValue(value, { emitEvent: false });
+  }
+
+
+  verifyPurchase(): void {
+    if (!this.isPaymentFormValid()) return;
+
+    const codigoVerificacion = this.generarCodigoVerificacion();
+    const cuentaEmail = this.adminData.correo;
+
+    const emailPayload = {
+      destinatario: cuentaEmail,
+      asunto: 'Código de verificación - UniEventos',
+      cuerpo: `Gracias por tu compra 🎉.\nTu código de verificación es: ${codigoVerificacion}`
+    };
+
+    this.http.post(ENDPOINTS.enviarCodigoPago, emailPayload).subscribe({
+      next: () => {
+        this.codigoVerificacionGenerado = codigoVerificacion;
+        this.showPaymentModal = false;
+        this.showVerificationModal = true;
+      },
+      error: err => {
+        console.error('Error enviando el email:', err);
+        alert('Hubo un problema al enviar el código de verificación.');
+      }
+    });
+  }
+
+  generarCodigoVerificacion(): string {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let codigo = '';
+    for (let i = 0; i < 6; i++) {
+      codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+    }
+    return codigo;
   }
 
 }

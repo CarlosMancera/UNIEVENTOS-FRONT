@@ -1,5 +1,7 @@
+<!-- HTML COMPLETO -->
 <div class="futbol-layout">
   <div class="compra-boleta-container" *ngIf="match">
+
     <!-- Encabezado -->
     <div class="header-match-info">
       <img [src]="obtenerEscudo(match.equipoLocal)" alt="Escudo Local" class="escudo">
@@ -21,7 +23,7 @@
     <!-- Imagen -->
     <img [src]="match.imagenPortada" alt="Portada del partido" class="portada">
 
-    <!-- Tabla -->
+    <!-- Tabla de Secciones -->
     <div class="tabla-secciones">
       <h3>Ubicaciones disponibles</h3>
       <table>
@@ -37,14 +39,14 @@
           <tr *ngFor="let s of sections">
             <td>{{ s.nombre }}</td>
             <td>{{ s.precio | currency:'COP' }}</td>
-            <td>{{ s.capacidadTotal | number:'1.0-0' }}</td>
-            <td>{{ s.capacidadRestante | number:'1.0-0' }}</td>
+            <td>{{ s.capacidadTotal }}</td>
+            <td>{{ s.capacidadRestante }}</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Formulario -->
+    <!-- Formulario de Compra -->
     <form [formGroup]="form" (ngSubmit)="comprar()" class="formulario-compra">
       <h3>Boletas a comprar</h3>
 
@@ -55,20 +57,15 @@
       <div formArrayName="portadores">
         <div *ngFor="let p of portadoresArray.controls; let i = index" [formGroupName]="i" class="portador-card">
           <h4>Portador {{ i + 1 }}</h4>
-
           <div class="checkbox-portador">
             <label>
-              <input type="checkbox" formControlName="soyElPortador" (change)="onTogglePortador(i)">
-              Soy el portador
+              <input type="checkbox" formControlName="soyElPortador" (change)="onTogglePortador(i)"> Soy el portador
             </label>
           </div>
-
           <div class="form-group">
             <select formControlName="sectionId">
               <option value="">Sección</option>
-              <option *ngFor="let s of sections" [value]="s.id">
-                {{ s.nombre }} - {{ s.precio | currency:'COP' }}
-              </option>
+              <option *ngFor="let s of sections" [value]="s.id">{{ s.nombre }} - {{ s.precio | currency:'COP' }}</option>
             </select>
             <input formControlName="cedula" placeholder="Cédula">
             <input formControlName="nombre" placeholder="Nombre">
@@ -87,5 +84,136 @@
         <button type="submit" [disabled]="form.invalid">Confirmar Compra</button>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- MODAL DE PAGO -->
+<div *ngIf="showPaymentModal" class="modal fade show" tabindex="-1" style="display: block; background: rgba(0, 0, 0, 0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form [formGroup]="paymentForm" (ngSubmit)="verifyPurchase()">
+        <div class="modal-header">
+          <h5 class="modal-title">Orden de Compra</h5>
+          <button type="button" class="btn-close" (click)="closePaymentModal()"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Información detallada de tu compra</strong></p>
+          <p>{{ selectedEvent.name }} - Fecha del evento: {{ selectedEvent.date }}</p>
+
+          <p>Escoja el Método de pago</p>
+          <div class="d-flex justify-content-center mb-3">
+            <img src="visa.png" alt="Visa"
+                 class="img-thumbnail mx-1 payment-option"
+                 [class.selected]="selectedPaymentMethod === 'Visa'"
+                 (click)="selectPaymentMethod('Visa')" />
+
+            <img src="visa-electron.png" alt="Visa Electron"
+                 class="img-thumbnail mx-1 payment-option"
+                 [class.selected]="selectedPaymentMethod === 'Visa Electron'"
+                 (click)="selectPaymentMethod('Visa Electron')" />
+
+            <img src="mastercard.png" alt="MasterCard"
+                 class="img-thumbnail mx-1 payment-option"
+                 [class.selected]="selectedPaymentMethod === 'MasterCard'"
+                 (click)="selectPaymentMethod('MasterCard')" />
+
+            <img src="maestro.png" alt="Maestro"
+                 class="img-thumbnail mx-1 payment-option"
+                 [class.selected]="selectedPaymentMethod === 'Maestro'"
+                 (click)="selectPaymentMethod('Maestro')" />
+
+            <img src="transfer.png" alt="Transferencia"
+                 class="img-thumbnail mx-1 payment-option"
+                 [class.selected]="selectedPaymentMethod === 'Transferencia'"
+                 (click)="selectPaymentMethod('Transferencia')" />
+
+            <img src="paypal.png" alt="PayPal"
+                 class="img-thumbnail mx-1 payment-option"
+                 [class.selected]="selectedPaymentMethod === 'PayPal'"
+                 (click)="selectPaymentMethod('PayPal')" />
+          </div>
+          <div class="mb-3">
+            <label for="cardHolder" class="form-label">Nombre del titular</label>
+            <input
+              id="cardHolder"
+              type="text"
+              formControlName="cardHolder"
+              class="form-control"
+              (input)="onCardHolderInput()"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="cardNumber" class="form-label">Número de tarjeta</label>
+            <input id="cardNumber" type="text" formControlName="cardNumber" class="form-control" (input)="onCardNumberInput()">
+          </div>
+
+
+          <div class="row">
+            <div class="col">
+              <label for="expiryDate" class="form-label">Fecha de expiración</label>
+              <input
+              id="expiryDate"
+              type="text"
+              formControlName="expiryDate"
+              class="form-control"
+              placeholder="MM/AA"
+              maxlength="5"
+              (input)="onExpiryDateInput()"
+            />
+            </div>
+            <div class="col">
+              <label for="cvv" class="form-label">Código de seguridad</label>
+              <input id="cvv" type="number" formControlName="cvv" class="form-control" placeholder="3 dígitos">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 mt-3" [disabled]="!isPaymentFormValid()">Pagar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE VERIFICACION -->
+<div *ngIf="showVerificationModal" class="modal fade show" tabindex="-1" style="display: block; background: rgba(0, 0, 0, 0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Verificación de Compra</h5>
+        <button type="button" class="btn-close" (click)="closeVerificationModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Revisa los detalles de tu compra</strong></p>
+        <p>{{ selectedEvent.name }} - Fecha: {{ selectedEvent.date }}</p>
+        <p><strong>Total a pagar:</strong> {{ calcularTotal() | currency:'COP' }}</p>
+        <p>Método de pago: {{ selectedPaymentMethod }}</p>
+        <p class="text-muted">Le hemos enviado un código de verificación a su correo.</p>
+        <div class="input-group mt-3">
+          <form [formGroup]="verificationForm">
+            <div class="input-group mt-3">
+              <input type="text" formControlName="verificationCode" class="form-control" placeholder="Ingresar código">
+              <button class="btn btn-primary" (click)="confirmVerification()">Confirmar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE EXITO -->
+<div *ngIf="showSuccessModal" class="modal fade show" tabindex="-1" style="display: block; background: rgba(0, 0, 0, 0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content success-modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">¡Pago Exitoso!</h5>
+        <button type="button" class="btn-close" (click)="closeSuccessModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p>Gracias por tu compra, te hemos aplicado un 20% de descuento.</p>
+        <p class="text-muted">Consulta tu correo para más detalles y descarga de entradas.</p>
+        <button class="btn btn-dark" (click)="closeSuccessModal()">Salir</button>
+      </div>
+    </div>
   </div>
 </div>

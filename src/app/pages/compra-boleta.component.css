@@ -212,4 +212,20 @@ button[type="submit"]:hover {
   font-size: 15px;
 }
 
+.payment-option {
+  transition: transform 0.2s, box-shadow 0.3s;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 8px;
+}
+
+.payment-option:hover {
+  transform: scale(1.05);
+}
+
+.payment-option.selected {
+  border: 2px solid #ffd700;
+  box-shadow: 0 0 10px #ffd700;
+  transform: scale(1.1);
+}
 

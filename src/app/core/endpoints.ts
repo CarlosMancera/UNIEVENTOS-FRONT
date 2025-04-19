@@ -46,5 +46,6 @@ export const ENDPOINTS = {
   crearTicket: new Endpoint(URL_BASE, 'tickets', true),
 
   listarTicketsPorCuenta: new Endpoint(URL_BASE, 'tickets/cuenta/{cuentaId}', true),
+  enviarCodigoPago: new Endpoint(URL_BASE, 'api/email/codigo-pago', true),
 
 };

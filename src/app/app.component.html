@@ -35,11 +35,11 @@
         <li>
           <a routerLink="/contactenos" routerLinkActive="active">Contactenos</a>
         </li>
-        <li class="cart-icon" *ngIf="authService.isLoggedIn() && authService.getCurrentUser()?.role === 'user'">
+        <!-- <li class="cart-icon" *ngIf="authService.isLoggedIn() && authService.getCurrentUser()?.role === 'user'">
           <a routerLink="/compras">
             <i class="fas fa-shopping-cart"></i>
           </a>
-        </li>
+        </li> -->
 
         <ng-container *ngIf="!authService.isLoggedIn()">
           <li class="user-icon">
