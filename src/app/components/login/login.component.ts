@@ -47,11 +47,15 @@ export class LoginComponent {
 
 
   onSubmit() {
-
     const recaptchaToken = this.getRecaptchaToken();
 
     if (!recaptchaToken) {
-      Swal.fire('Validación requerida', 'Por favor confirma que no eres un robot.', 'warning');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Validación requerida',
+        text: 'Por favor confirma que no eres un robot.',
+        confirmButtonColor: '#ffd700'
+      });
       return;
     }
 
@@ -59,9 +63,15 @@ export class LoginComponent {
 
     this.authService.iniciarSesion(this.loginData).subscribe({
       next: (data) => {
+        this.bcLoadingService.close();
+
         if (data.error) {
-          this.bcLoadingService.close();
-          Swal.fire('Error', data.respuesta || 'Error desconocido', 'error');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error al iniciar sesión',
+            text: data.respuesta || 'Error desconocido',
+            confirmButtonColor: '#d33'
+          });
           return;
         }
 
@@ -71,7 +81,14 @@ export class LoginComponent {
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.authService.checkAuthentication();
 
-        this.bcLoadingService.close();
+        Swal.fire({
+          icon: 'success',
+          title: '¡Bienvenido!',
+          text: `Has iniciado sesión como ${user.name}`,
+          confirmButtonColor: '#28a745',
+          timer: 2000,
+          showConfirmButton: false
+        });
 
         if (user.role === 'admin') {
           this.router.navigate(['/admin']);
@@ -84,9 +101,14 @@ export class LoginComponent {
         console.error('❌ Error completo:', error);
 
         let mensaje = 'Ocurrió un error inesperado.';
+        let icon: 'warning' | 'error' = 'error';
 
         if (error.status === 409) {
-          mensaje = '⚠️ Ya hay una sesión activa con esta cuenta.';
+          mensaje = '⚠️ El usuario ya tiene una sesión activa.';
+          icon = 'warning';
+        } else if (error?.error?.respuesta?.toLowerCase().includes('credenciales')) {
+          mensaje = '❌ Correo o contraseña incorrectos.';
+          icon = 'error';
         } else if (error?.error?.respuesta) {
           mensaje = error.error.respuesta;
         } else if (typeof error?.error === 'string') {
@@ -95,11 +117,16 @@ export class LoginComponent {
           mensaje = error.message;
         }
 
-        Swal.fire('Error', mensaje, 'error');
+        Swal.fire({
+          icon,
+          title: 'Error al iniciar sesión',
+          text: mensaje,
+          confirmButtonColor: '#d33'
+        });
       }
-
     });
   }
+
 
   openForgotPasswordModal() {
     this.dialog.open(ForgotPasswordDialogComponent, {
