@@ -24,39 +24,51 @@ import { PartidosComponent } from './components/partidos/partidos/partidos.compo
 import { CompraBoletaComponent } from './pages/compra-boleta.component';
 
 
+import { AuthGuard } from './guards/auth.guard';
+import { RoleGuard } from './guards/role.guard';
+
 export const routes: Routes = [
-   { path: 'contactenos', component: ConntactenosComponent },
-   { path: 'quienes-somos', component: QuienesSomosComponent },
-   { path: '', component: InicioComponent },
-   { path: 'actualizar-password', component: ActualizarPasswordComponent },
-   { path: 'login', component: LoginComponent },
-   { path: 'registro', component: RegistroComponent },
-   { path: 'partidos', component: PartidosComponent},
-   { path: 'compras', component: ComprasComponent},
-   { path: 'compras/:id', component: CompraBoletaComponent},
-   { path: 'admin', component: AdminComponent,
-      children: [
-         { path: '', redirectTo: 'datos', pathMatch: 'full' },
-         { path: 'datos', component: DatoAdminComponent },
-         { path: 'evento-admin', component: EventoAdminComponent },
-         { path: 'crear-cupon', component: CrearCuponComponent },
-         { path: 'cupon-admin', component: CuponAdminComponent },
-         { path: 'equipo-admin', component: EquipoAdminComponent },
-         { path: 'partido-admin', component: MatchAdminComponent },
-         { path: 'crear-partido', component: MatchCrearComponent },
-         { path: 'editar-partido/:id', component: MatchCrearComponent },
-       ]
-   },
-   { path: 'user', component: UserComponent,
-      children: [
-         { path: '', redirectTo: 'perfil', pathMatch: 'full' },
-         { path: 'perfil', component: PerfilUsuarioComponent },
-         { path: 'lista-deseos', component: ListaDeseosComponent},
-         { path: 'historial', component: HistorialComprasComponent},
-         // Aquí irán las demás rutas para las otras pestañas
-       ]
-   },
+  { path: '', component: InicioComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'registro', component: RegistroComponent },
+  { path: 'partidos', component: PartidosComponent },
+  { path: 'compras/:id', component: CompraBoletaComponent },
+  { path: 'quienes-somos', component: QuienesSomosComponent },
+  { path: 'contactenos', component: ConntactenosComponent },
+  { path: 'actualizar-password', component: ActualizarPasswordComponent },
 
-   { path: "**", pathMatch: "full", redirectTo: "" }
+  { path: 'compras', component: ComprasComponent, canActivate: [AuthGuard] },
+
+  {
+    path: 'user',
+    component: UserComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { expectedRole: 'user' },
+    children: [
+      { path: '', redirectTo: 'perfil', pathMatch: 'full' },
+      { path: 'perfil', component: PerfilUsuarioComponent },
+      { path: 'lista-deseos', component: ListaDeseosComponent },
+      { path: 'historial', component: HistorialComprasComponent },
+    ]
+  },
+
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { expectedRole: 'admin' },
+    children: [
+      { path: '', redirectTo: 'datos', pathMatch: 'full' },
+      { path: 'datos', component: DatoAdminComponent },
+      { path: 'evento-admin', component: EventoAdminComponent },
+      { path: 'crear-cupon', component: CrearCuponComponent },
+      { path: 'cupon-admin', component: CuponAdminComponent },
+      { path: 'equipo-admin', component: EquipoAdminComponent },
+      { path: 'partido-admin', component: MatchAdminComponent },
+      { path: 'crear-partido', component: MatchCrearComponent },
+      { path: 'editar-partido/:id', component: MatchCrearComponent },
+    ]
+  },
+
+  { path: "**", pathMatch: "full", redirectTo: "" }
 ];
-
