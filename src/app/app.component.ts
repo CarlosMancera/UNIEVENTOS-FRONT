@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   title = 'UNIEVENTOS';
   isMenuOpen = false;
   dropdownVisible = false;
-  footer = '© 2024 UNIEVENTOS - Todos los derechos reservados';
+  footer = '© 2025 UNIEVENTOS - Todos los derechos reservados';
   usuarioNombre = '';
 
   constructor(public authService: AuthService, private router: Router, private bcLoadingService: BcLoadingService
