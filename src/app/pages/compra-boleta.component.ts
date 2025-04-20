@@ -224,13 +224,12 @@ export class CompraBoletaComponent implements OnInit {
 
     const inputCode = this.verificationForm.get('verificationCode')?.value?.trim().toUpperCase();
     const expectedCode = this.codigoVerificacionGenerado;
-
+    this.bcLoadingService.close();
     if (inputCode !== expectedCode) {
-      this.bcLoadingService.close();
       Swal.fire('❌ Código inválido', 'Verifica tu correo e intenta nuevamente.', 'error');
       return;
     }
-
+    this.bcLoadingService.show('Procesando compra...');
     const cuentaId = this.authService.getUserIdFromToken();
     if (!cuentaId || !this.match) return;
 
@@ -253,9 +252,9 @@ export class CompraBoletaComponent implements OnInit {
 
     this.http.post(ENDPOINTS.crearCompra, compraPayload).subscribe({
       next: () => {
-        this.bcLoadingService.close();
         this.showVerificationModal = false;
         this.showSuccessModal = true;
+        this.bcLoadingService.close();
       },
       error: (error) => {
         this.bcLoadingService.close();

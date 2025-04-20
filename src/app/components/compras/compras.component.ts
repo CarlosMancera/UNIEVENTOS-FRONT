@@ -32,10 +32,10 @@ export class ComprasComponent {
   showVerificationModal: boolean = false;
   showSuccessModal: boolean = false;
   discountRate: number = 0; // Inicialmente sin descuento
-  selectedPaymentMethod: string = ''; 
+  selectedPaymentMethod: string = '';
   cartItems: any[] = [];
-  verificationError: boolean = false; 
-  cardNumberError: boolean = false; 
+  verificationError: boolean = false;
+  cardNumberError: boolean = false;
 
   selectedEvent: Event = {
     id: 1,
@@ -154,6 +154,7 @@ export class ComprasComponent {
   confirmVerification(): void {
     this.showVerificationModal = false;
     this.showSuccessModal = true;
+
   }
 
   closeSuccessModal(): void {
