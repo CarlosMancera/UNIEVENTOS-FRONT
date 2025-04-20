@@ -220,11 +220,9 @@ export class CompraBoletaComponent implements OnInit {
   }
 
   confirmVerification(): void {
-    this.bcLoadingService.show('Procesando compra...');
 
     const inputCode = this.verificationForm.get('verificationCode')?.value?.trim().toUpperCase();
     const expectedCode = this.codigoVerificacionGenerado;
-    this.bcLoadingService.close();
     if (inputCode !== expectedCode) {
       Swal.fire('❌ Código inválido', 'Verifica tu correo e intenta nuevamente.', 'error');
       return;
