@@ -81,12 +81,13 @@ export class LoginComponent {
       },
       error: (error) => {
         this.bcLoadingService.close();
-
         console.error('❌ Error completo:', error);
 
         let mensaje = 'Ocurrió un error inesperado.';
 
-        if (error?.error?.respuesta) {
+        if (error.status === 409) {
+          mensaje = '⚠️ Ya hay una sesión activa con esta cuenta.';
+        } else if (error?.error?.respuesta) {
           mensaje = error.error.respuesta;
         } else if (typeof error?.error === 'string') {
           mensaje = error.error;
@@ -96,6 +97,7 @@ export class LoginComponent {
 
         Swal.fire('Error', mensaje, 'error');
       }
+
     });
   }
 
