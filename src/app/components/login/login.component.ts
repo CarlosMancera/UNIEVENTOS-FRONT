@@ -33,10 +33,12 @@ export class LoginComponent {
   ) {}
 
   onSubmit() {
-    this.bcLoadingService.show('Cargando datos...');
+    this.bcLoadingService.show('Iniciando sesión...');
+
     this.authService.iniciarSesion(this.loginData).subscribe({
       next: (data) => {
         if (data.error) {
+          this.bcLoadingService.close();
           Swal.fire('Error', data.respuesta || 'Error desconocido', 'error');
           return;
         }
@@ -47,16 +49,30 @@ export class LoginComponent {
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.authService.checkAuthentication();
 
+        this.bcLoadingService.close();
+
         if (user.role === 'admin') {
           this.router.navigate(['/admin']);
         } else {
           this.router.navigate(['/']);
         }
-        this.bcLoadingService.close();
       },
       error: (error) => {
         this.bcLoadingService.close();
-        Swal.fire('Error', error?.error?.respuesta || 'Error en la solicitud', 'error');
+
+        console.error('❌ Error completo:', error);
+
+        let mensaje = 'Ocurrió un error inesperado.';
+
+        if (error?.error?.respuesta) {
+          mensaje = error.error.respuesta;
+        } else if (typeof error?.error === 'string') {
+          mensaje = error.error;
+        } else if (error?.message) {
+          mensaje = error.message;
+        }
+
+        Swal.fire('Error', mensaje, 'error');
       }
     });
   }
@@ -66,5 +82,9 @@ export class LoginComponent {
       width: '400px',
       disableClose: true
     });
+  }
+
+  get isFormValid(): boolean {
+    return this.loginData.email.trim() !== '' && this.loginData.password.length >= 4;
   }
 }

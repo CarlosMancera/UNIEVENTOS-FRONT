@@ -51,7 +51,13 @@
       <h3>Boletas a comprar</h3>
 
       <div class="form-group">
-        <input type="number" formControlName="cantidad" min="1" (change)="actualizarCantidadBoletas()" placeholder="Cantidad de boletas">
+        <input
+        type="number"
+        formControlName="cantidad"
+        min="1"
+        max="3"
+        (change)="actualizarCantidadBoletas()"
+        placeholder="Cantidad de boletas">
       </div>
 
       <div formArrayName="portadores">
@@ -63,9 +69,11 @@
             </label>
           </div>
           <div class="form-group">
-            <select formControlName="sectionId">
+            <select formControlName="sectionId" (change)="onSectionChange()">
               <option value="">Sección</option>
-              <option *ngFor="let s of sections" [value]="s.id">{{ s.nombre }} - {{ s.precio | currency:'COP' }}</option>
+              <option *ngFor="let s of seccionesDisponibles" [value]="s.id">
+                {{ s.nombre }} - {{ s.precio | currency:'COP' }} ({{ s.capacidadRestante }} disp.)
+              </option>
             </select>
             <input formControlName="cedula" placeholder="Cédula">
             <input formControlName="nombre" placeholder="Nombre">
@@ -81,7 +89,13 @@
       </div>
 
       <div class="botones">
-        <button type="submit" [disabled]="form.invalid">Confirmar Compra</button>
+        <button
+        type="submit"
+        [disabled]="form.invalid"
+        [class.disabled]="form.invalid"
+        class="btn btn-success">
+        Confirmar Compra
+      </button>
       </div>
     </form>
   </div>

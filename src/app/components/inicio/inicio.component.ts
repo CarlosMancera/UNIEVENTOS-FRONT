@@ -5,6 +5,7 @@ import { MatchService } from '../../services/match.service';
 import { Match } from '../../models/match.model';
 import { Team } from '../../models/team.model';
 import { TeamService } from '../../services/Team.service';
+import { BcLoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-inicio',
@@ -19,7 +20,9 @@ export class InicioComponent implements OnDestroy {
   currentSlide = 0;
   intervaloAutoPlay: any;
 
-  constructor(private matchService: MatchService, private teamService: TeamService) {
+  constructor(private matchService: MatchService, private teamService: TeamService,
+    private bcLoadingService: BcLoadingService
+  ) {
     this.obtenerDatos();
   }
 
@@ -28,10 +31,12 @@ export class InicioComponent implements OnDestroy {
   }
 
   obtenerDatos() {
+    this.bcLoadingService.show('Cargando datos...');
     this.matchService.listar().subscribe({
       next: (data) => {
         this.partidos = data;
-        this.iniciarAutoPlay(); // ⏱️ Inicia auto-play cuando se cargan
+        this.iniciarAutoPlay();
+        this.bcLoadingService.close();
       },
       error: (err) => console.error(err)
     });
@@ -40,6 +45,7 @@ export class InicioComponent implements OnDestroy {
       next: (data) => this.equipos = data,
       error: (err) => console.error(err)
     });
+
   }
 
   obtenerEntrenador(nombre: string): string {

@@ -9,11 +9,13 @@ import { HttpClientService } from '../services/HttpClientService.service';
 import { MatchService } from '../services/match.service';
 import { SectionService } from '../services/section.service';
 import { CrearTicketDTO } from '../dto/CrearTicketDTO';
+import Swal from 'sweetalert2';
 import { ENDPOINTS } from '../core/endpoints';
 import { Team } from '../models/team.model';
 import { TeamService } from '../services/Team.service';
 import { CuentaService } from '../services/cuenta.service';
 import { ChangeDetectorRef } from '@angular/core';
+import { BcLoadingService } from '../services/loading.service';
 
 @Component({
   selector: 'app-compra-boleta',
@@ -63,16 +65,19 @@ export class CompraBoletaComponent implements OnInit {
     private http: HttpClientService,
     private router: Router,
     private teamService: TeamService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private bcLoadingService: BcLoadingService
+
   ) {}
 
   ngOnInit(): void {
+
     if (!this.authService.isLoggedIn()) {
       alert('Debes iniciar sesión para continuar.');
       this.router.navigate(['/login']);
       return;
     }
-
+    this.bcLoadingService.show('Cargando datos...');
     this.verificationForm = this.fb.group({
       verificationCode: ['', Validators.required]
     });
@@ -112,10 +117,13 @@ export class CompraBoletaComponent implements OnInit {
           confirmarContrasena: ''
         };
         this.isEditing = false;
+        this.bcLoadingService.close();
+
       },
       error: (err) => {
         console.error('Error al obtener información del administrador:', err);
         alert('Error al obtener información del administrador.');
+        this.bcLoadingService.close();
       }
     });
 
@@ -156,7 +164,19 @@ export class CompraBoletaComponent implements OnInit {
   }
 
   actualizarCantidadBoletas(): void {
-    const cantidad = this.form.get('cantidad')?.value || 1;
+    let cantidad = this.form.get('cantidad')?.value || 1;
+
+    if (cantidad > 3) {
+      cantidad = 3;
+      this.form.patchValue({ cantidad });
+      Swal.fire({
+        icon: 'warning',
+        title: 'Límite de Boletas',
+        text: 'Solo puedes comprar un máximo de 3 boletas por cuenta.',
+        confirmButtonText: 'Entendido'
+      });
+    }
+
     this.portadores.clear();
 
     for (let i = 0; i < cantidad; i++) {
@@ -200,40 +220,48 @@ export class CompraBoletaComponent implements OnInit {
   }
 
   confirmVerification(): void {
+    this.bcLoadingService.show('Procesando compra...');
+
     const inputCode = this.verificationForm.get('verificationCode')?.value?.trim().toUpperCase();
     const expectedCode = this.codigoVerificacionGenerado;
 
-    console.log('🧾 Código ingresado:', inputCode);
-    console.log('✅ Código generado:', expectedCode);
-
     if (inputCode !== expectedCode) {
-      alert('❌ El código ingresado no es válido. Por favor verifica tu correo e intenta nuevamente.');
+      this.bcLoadingService.close();
+      Swal.fire('❌ Código inválido', 'Verifica tu correo e intenta nuevamente.', 'error');
       return;
     }
 
-    // El resto igual...
     const cuentaId = this.authService.getUserIdFromToken();
     if (!cuentaId || !this.match) return;
 
-    const portadores = this.portadoresArray.getRawValue();
+    const tickets = this.portadoresArray.getRawValue().map(p => ({
+      matchId: this.match.id!,
+      sectionId: p.sectionId,
+      cuentaId,
+      cedulaPortador: p.cedula,
+      nombrePortador: p.nombre,
+      direccionPortador: p.direccion,
+      telefonoPortador: p.telefono,
+      emailPortador: p.email
+    }));
 
-    for (let p of portadores) {
-      const ticket: CrearTicketDTO = {
-        matchId: this.match.id!,
-        sectionId: p.sectionId,
-        cuentaId,
-        cedulaPortador: p.cedula,
-        nombrePortador: p.nombre,
-        direccionPortador: p.direccion,
-        telefonoPortador: p.telefono,
-        emailPortador: p.email
-      };
+    const compraPayload = {
+      cuentaId,
+      matchId: this.match.id!,
+      tickets
+    };
 
-      this.http.post(ENDPOINTS.crearTicket, ticket).subscribe();
-    }
-
-    this.showVerificationModal = false;
-    this.showSuccessModal = true;
+    this.http.post(ENDPOINTS.crearCompra, compraPayload).subscribe({
+      next: () => {
+        this.bcLoadingService.close();
+        this.showVerificationModal = false;
+        this.showSuccessModal = true;
+      },
+      error: (error) => {
+        this.bcLoadingService.close();
+        Swal.fire('❌ Error en la compra', error?.error || 'No se pudieron procesar todas las entradas.', 'error');
+      }
+    });
   }
 
   closePaymentModal(): void {
@@ -360,7 +388,11 @@ export class CompraBoletaComponent implements OnInit {
 
 
   verifyPurchase(): void {
+    this.bcLoadingService.show('Cargando datos...');
+
     if (!this.isPaymentFormValid()) return;
+
+    if (!this.validarDisponibilidadPorSeccion()) return;
 
     const codigoVerificacion = this.generarCodigoVerificacion();
     const cuentaEmail = this.adminData.correo;
@@ -376,10 +408,14 @@ export class CompraBoletaComponent implements OnInit {
         this.codigoVerificacionGenerado = codigoVerificacion;
         this.showPaymentModal = false;
         this.showVerificationModal = true;
+        this.bcLoadingService.close();
+
       },
       error: err => {
         console.error('Error enviando el email:', err);
         alert('Hubo un problema al enviar el código de verificación.');
+        this.bcLoadingService.close();
+
       }
     });
   }
@@ -391,6 +427,61 @@ export class CompraBoletaComponent implements OnInit {
       codigo += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
     }
     return codigo;
+  }
+
+  validarDisponibilidadPorSeccion(): boolean {
+    const conteo: Record<number, number> = {};
+
+    for (let portador of this.portadoresArray.controls) {
+      const id = +portador.get('sectionId')?.value;
+      if (!conteo[id]) {
+        conteo[id] = 1;
+      } else {
+        conteo[id]++;
+      }
+    }
+
+    for (let id in conteo) {
+      const section = this.sections.find(s => s.id === +id);
+      if (section && conteo[id] > section.capacidadRestante) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Capacidad Insuficiente',
+          text: `La sección "${section.nombre}" solo tiene ${section.capacidadRestante} disponibles.`,
+          confirmButtonText: 'Cambiar selección'
+        });
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  get seccionesDisponibles(): Section[] {
+    return this.sections.filter(s => s.capacidadRestante > 0);
+  }
+
+  onSectionChange(): void {
+    const conteo: Record<number, number> = {};
+
+    for (let portador of this.portadoresArray.controls) {
+      const sectionId = +portador.get('sectionId')?.value;
+      if (!sectionId) continue;
+
+      conteo[sectionId] = (conteo[sectionId] || 0) + 1;
+
+      const section = this.sections.find(s => s.id === sectionId);
+      if (section && conteo[sectionId] > section.capacidadRestante) {
+        portador.get('sectionId')?.setValue('');
+
+        Swal.fire({
+          icon: 'warning',
+          title: 'Sección sin disponibilidad',
+          text: `La sección "${section.nombre}" solo tiene ${section.capacidadRestante} cupos disponibles.`,
+          confirmButtonText: 'Entendido'
+        });
+      }
+    }
   }
 
 }

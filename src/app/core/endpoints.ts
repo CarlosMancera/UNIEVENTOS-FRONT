@@ -13,10 +13,8 @@ export class Endpoint {
 }
 
 export const ENDPOINTS = {
-  // === URL_AUTH ===
   iniciarSesion: new Endpoint(URL_AUTH, 'iniciar-sesion', false),
 
-  // === URL_AUTH_AUX ===
   crearCuenta: new Endpoint(URL_AUTH_AUX, 'crear-cuenta', false),
   recuperarPassword: new Endpoint(URL_AUTH_AUX, 'recuperar-password', false),
   recuperaInfoCuenta: new Endpoint(URL_AUTH_AUX, 'obtener-info-cuenta/{id}', false),
@@ -44,7 +42,7 @@ export const ENDPOINTS = {
   listarSectionsPorMatch: new Endpoint(URL_BASE, 'secciones/por-partido/{matchId}', true),
 
   crearTicket: new Endpoint(URL_BASE, 'tickets', true),
-
+  crearCompra: new Endpoint(URL_BASE, 'tickets/compra', true),
   listarTicketsPorCuenta: new Endpoint(URL_BASE, 'tickets/cuenta/{cuentaId}', true),
   enviarCodigoPago: new Endpoint(URL_BASE, 'api/email/codigo-pago', true),
 

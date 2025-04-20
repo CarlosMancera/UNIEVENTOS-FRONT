@@ -6,6 +6,7 @@ import { ENDPOINTS } from '../../../core/endpoints';
 import { HttpClientService } from '../../../services/HttpClientService.service';
 import { AuthService } from '../../../services/auth.service';
 import { ItemTicketDTO } from '../../../dto/itemTicketDTO';
+import { BcLoadingService } from '../../../services/loading.service';
 
 
 @Component({
@@ -23,7 +24,8 @@ export class HistorialComprasComponent {
 
   constructor(
     private http: HttpClientService,
-    private authService: AuthService
+    private authService: AuthService,
+    private bcLoadingService: BcLoadingService
   ) {}
 
   ngOnInit(): void {
@@ -31,6 +33,7 @@ export class HistorialComprasComponent {
   }
 
   cargarHistorial(): void {
+    this.bcLoadingService.show('Cargando datos...');
     const cuentaId = this.authService.getUserIdFromToken();
     if (!cuentaId) return;
 
@@ -41,9 +44,11 @@ export class HistorialComprasComponent {
       .subscribe({
         next: (tickets) => {
           this.historialCompras = tickets;
+          this.bcLoadingService.close();
         },
         error: (err) => {
           console.error('Error al cargar historial de tickets', err);
+          this.bcLoadingService.close();
         }
       });
   }

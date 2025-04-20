@@ -6,6 +6,8 @@ import { MatchService } from '../../../services/match.service';
 import { Match } from '../../../models/match.model';
 import { Team } from '../../../models/team.model';
 import { TeamService } from '../../../services/Team.service';
+import { BcLoadingService } from '../../../services/loading.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-partidos',
@@ -24,22 +26,32 @@ export class PartidosComponent {
 
   constructor(
     private matchService: MatchService,
-    private teamService: TeamService
+    private teamService: TeamService,
+    private bcLoadingService: BcLoadingService
   ) {
     this.cargarDatos();
   }
 
   cargarDatos() {
-    this.matchService.listar().subscribe({
-      next: (data) => this.partidos = data,
-      error: (err) => console.error(err)
-    });
+    this.bcLoadingService.show('Cargando datos...');
 
-    this.teamService.listar().subscribe({
-      next: (data) => this.equipos = data,
-      error: (err) => console.error(err)
+    forkJoin({
+      partidos: this.matchService.listar(),
+      equipos: this.teamService.listar()
+    }).subscribe({
+      next: ({ partidos, equipos }) => {
+        this.partidos = partidos;
+        this.equipos = equipos;
+      },
+      error: (err) => {
+        console.error('❌ Error al cargar datos:', err);
+      },
+      complete: () => {
+        this.bcLoadingService.close();
+      }
     });
   }
+
 
   getCiudades(): string[] {
     const ciudades = this.equipos.map(e => e.ciudad);

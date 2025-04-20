@@ -43,9 +43,12 @@
             placeholder="****************"
             required>
         </div>
+        <div *ngIf="loginData.password && loginData.password.length < 4" class="error-message">
+          La contraseña debe tener al menos 4 caracteres.
+        </div>
       </div>
 
-      <button type="submit" class="login-button">Iniciar Sesión</button>
+      <button type="submit" class="login-button" [disabled]="!isFormValid">Iniciar Sesión</button>
 
       <div class="form-links">
         <a class="forgot-password" (click)="openForgotPasswordModal()">¿Olvidó su contraseña?</a>
