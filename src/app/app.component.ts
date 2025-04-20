@@ -3,6 +3,7 @@ import { RouterOutlet, RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
 import { BcLoadingComponent } from './components/bc-loading/bc-loading.component';
+import { BcLoadingService } from './services/loading.service';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,8 @@ export class AppComponent implements OnInit {
   footer = '© 2024 UNIEVENTOS - Todos los derechos reservados';
   usuarioNombre = '';
 
-  constructor(public authService: AuthService, private router: Router) {}
+  constructor(public authService: AuthService, private router: Router, private bcLoadingService: BcLoadingService
+  ) {}
 
   ngOnInit(): void {
     this.authService.currentUser$.subscribe((user) => {
@@ -40,15 +42,18 @@ export class AppComponent implements OnInit {
   }
 
   logout(event: Event): void {
+    this.bcLoadingService.show('Cerrando sesion...');
     event.stopPropagation();
     this.authService.logout().subscribe({
       next: (response) => {
         console.log(response);
         this.router.navigate(['/']);
+        this.bcLoadingService.close();
       },
       error: (err) => {
         console.error(err);
         this.router.navigate(['/']);
+        this.bcLoadingService.close();
       }
     });
   }

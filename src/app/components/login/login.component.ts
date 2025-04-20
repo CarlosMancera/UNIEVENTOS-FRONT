@@ -23,6 +23,7 @@ import { BcLoadingService } from '../../services/loading.service';
 })
 export class LoginComponent {
   loginData: LoginDTO = { email: '', password: '' };
+  recaptchaRendered = false;
 
   constructor(
     private router: Router,
@@ -32,7 +33,28 @@ export class LoginComponent {
     private bcLoadingService: BcLoadingService
   ) {}
 
+  ngAfterViewInit(): void {
+    const interval = setInterval(() => {
+      if ((window as any).grecaptcha && !this.recaptchaRendered) {
+        (window as any).grecaptcha.render('recaptcha-container', {
+          sitekey: '6LcU7R4rAAAAAD2uxlm1CiweNhLdDDH3ynqmDv8B'
+        });
+        this.recaptchaRendered = true;
+        clearInterval(interval);
+      }
+    }, 300);
+  }
+
+
   onSubmit() {
+
+    const recaptchaToken = this.getRecaptchaToken();
+
+    if (!recaptchaToken) {
+      Swal.fire('Validación requerida', 'Por favor confirma que no eres un robot.', 'warning');
+      return;
+    }
+
     this.bcLoadingService.show('Iniciando sesión...');
 
     this.authService.iniciarSesion(this.loginData).subscribe({
@@ -87,4 +109,10 @@ export class LoginComponent {
   get isFormValid(): boolean {
     return this.loginData.email.trim() !== '' && this.loginData.password.length >= 4;
   }
+
+  getRecaptchaToken(): string | null {
+    const token = (window as any).grecaptcha?.getResponse();
+    return token && token.length > 0 ? token : null;
+  }
+
 }

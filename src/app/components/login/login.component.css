@@ -245,3 +245,17 @@
   box-shadow: none;
 }
 
+#recaptcha-container {
+  margin: 1.5rem 0;
+  display: flex;
+  justify-content: center;
+  transform: scale(1.05);
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  #recaptcha-container {
+    transform: scale(0.95);
+  }
+}
+

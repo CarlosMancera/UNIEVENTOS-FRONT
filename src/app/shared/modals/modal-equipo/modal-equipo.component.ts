@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { Team } from '../../../models/team.model';
 import { TeamService } from '../../../services/Team.service';
 import { ImagenService } from '../../../services/ImagenService.service';
+import { Observable } from 'rxjs';
 import { BcLoadingService } from '../../../services/loading.service';
 
 @Component({
@@ -73,12 +74,26 @@ export class ModalEquipoComponent {
   }
 
   guardarEquipo(): void {
+    let accion$: Observable<any>;
+
     if (this.equipo.id) {
-      this.teamService.actualizar(this.equipo.id, this.equipo).subscribe(() => this.ref.close(true));
+      accion$ = this.teamService.actualizar(this.equipo.id, this.equipo);
     } else {
-      this.teamService.crear(this.equipo).subscribe(() => this.ref.close(true));
+      accion$ = this.teamService.crear(this.equipo);
     }
-    this.bcLoadingService.close();
+
+    this.bcLoadingService.show('Guardando equipo...');
+
+    accion$.subscribe({
+      next: () => {
+        this.ref.close(true);
+        this.bcLoadingService.close();
+      },
+      error: () => {
+        this.bcLoadingService.close();
+        alert('Error al guardar equipo');
+      }
+    });
   }
 
   cancelar(): void {
