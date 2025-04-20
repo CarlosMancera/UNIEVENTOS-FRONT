@@ -45,7 +45,6 @@ export class LoginComponent {
     }, 300);
   }
 
-
   onSubmit() {
     const recaptchaToken = this.getRecaptchaToken();
 
@@ -104,15 +103,23 @@ export class LoginComponent {
         let icon: 'warning' | 'error' = 'error';
 
         if (error.status === 409) {
-          mensaje = '⚠️ El usuario ya tiene una sesión activa.';
+          mensaje = error.error?.respuesta || '⚠️ El usuario ya tiene una sesión activa.';
           icon = 'warning';
+
+        } else if (error.status === 404) {
+          mensaje = error.error?.respuesta || '❌ El correo no está registrado.';
+          icon = 'error';
+
         } else if (error?.error?.respuesta?.toLowerCase().includes('credenciales')) {
           mensaje = '❌ Correo o contraseña incorrectos.';
           icon = 'error';
+
         } else if (error?.error?.respuesta) {
           mensaje = error.error.respuesta;
+
         } else if (typeof error?.error === 'string') {
           mensaje = error.error;
+
         } else if (error?.message) {
           mensaje = error.message;
         }
@@ -126,7 +133,6 @@ export class LoginComponent {
       }
     });
   }
-
 
   openForgotPasswordModal() {
     this.dialog.open(ForgotPasswordDialogComponent, {
