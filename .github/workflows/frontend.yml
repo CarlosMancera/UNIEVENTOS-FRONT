@@ -2,7 +2,7 @@ name: Frontend CI/CD
 
 on:
   push:
-    branches: [ UNIEVENTOS-FRONT ]
+    branches: [ master ]
     paths:
       - 'Front/UNIEVENTOS-FRONT/**'
 
