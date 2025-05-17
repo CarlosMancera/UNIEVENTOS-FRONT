@@ -17,15 +17,15 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
-        working-directory: Front/UNIEVENTOS-FRONT
+        working-directory: .
         run: npm install
 
       - name: Run unit tests
-        working-directory: Front/UNIEVENTOS-FRONT
+        working-directory: .
         run: npm run test -- --watch=false --browsers=ChromeHeadless
 
       - name: SonarCloud Analysis
-        working-directory: Front/UNIEVENTOS-FRONT
+        working-directory: .
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
@@ -38,14 +38,14 @@ jobs:
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
       - name: Build Angular app
-        working-directory: Front/UNIEVENTOS-FRONT
+        working-directory: .
         run: npm run build --prod
 
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v2.0
         with:
-          publish-dir: Front/UNIEVENTOS-FRONT/dist/unieventos-front
-          production-branch: UNIEVENTOS-FRONT
+          publish-dir: dist/unieventos-front
+          production-branch: master
           github-token: ${{ secrets.GITHUB_TOKEN }}
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
