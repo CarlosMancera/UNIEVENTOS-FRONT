@@ -1,0 +1,54 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [ UNIEVENTOS-FRONT ]
+    paths:
+      - 'Front/UNIEVENTOS-FRONT/**'
+
+jobs:
+  sonar-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        working-directory: Front/UNIEVENTOS-FRONT
+        run: npm install
+
+      - name: Run unit tests
+        working-directory: Front/UNIEVENTOS-FRONT
+        run: npm run test -- --watch=false --browsers=ChromeHeadless
+
+      - name: SonarCloud Analysis
+        working-directory: Front/UNIEVENTOS-FRONT
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          npm install -g sonarqube-scanner
+          sonar-scanner \
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY_FRONT }} \
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
+            -Dsonar.sources=src \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+      - name: Build Angular app
+        working-directory: Front/UNIEVENTOS-FRONT
+        run: npm run build --prod
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v2.0
+        with:
+          publish-dir: Front/UNIEVENTOS-FRONT/dist/unieventos-front
+          production-branch: UNIEVENTOS-FRONT
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
