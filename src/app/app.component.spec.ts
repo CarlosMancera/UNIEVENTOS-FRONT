@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { AuthService } from './services/auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BcLoadingService } from './services/loading.service';
 import { of } from 'rxjs';
 
@@ -31,7 +31,9 @@ describe('AppComponent', () => {
       providers: [
         { provide: AuthService, useClass: MockAuthService },
         { provide: Router, useClass: MockRouter },
-        { provide: BcLoadingService, useClass: MockBcLoadingService }
+        { provide: BcLoadingService, useClass: MockBcLoadingService },
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => null } } } }
+
       ]
     }).compileComponents();
 
