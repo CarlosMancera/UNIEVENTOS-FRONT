@@ -28,7 +28,10 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent, RouterTestingModule], // <- CORRECCIÓN CLAVE
+      imports: [
+        AppComponent,
+        RouterTestingModule.withRoutes([])  // ✅ IMPORTANTE para evitar error de router
+      ],
       providers: [
         { provide: AuthService, useClass: MockAuthService },
         { provide: Router, useClass: MockRouter },
@@ -50,7 +53,7 @@ describe('AppComponent', () => {
   });
 
   it('should call authService.checkAuthentication on init', () => {
-    expect((component as any)['authService'].checkAuthentication).toHaveBeenCalled();
+    expect((component as any).authService.checkAuthentication).toHaveBeenCalled();
   });
 
   it('should update usuarioNombre from currentUser$', () => {
