@@ -5,8 +5,10 @@ import { Router } from '@angular/router';
 import { BcLoadingService } from './services/loading.service';
 import { of } from 'rxjs';
 import { RouterTestingModule } from '@angular/router/testing';
+import { CommonModule } from '@angular/common';
+import { BcLoadingComponent } from './components/bc-loading/bc-loading.component';
 
-// Mocks
+// ✅ Mocks
 class MockAuthService {
   currentUser$ = of({ name: 'Usuario Prueba' });
   checkAuthentication = jasmine.createSpy('checkAuthentication');
@@ -28,9 +30,12 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      // 👇 Standalone component
       imports: [
         AppComponent,
-        RouterTestingModule.withRoutes([])  // ✅ IMPORTANTE para evitar error de router
+        RouterTestingModule.withRoutes([]),
+        CommonModule,
+        BcLoadingComponent
       ],
       providers: [
         { provide: AuthService, useClass: MockAuthService },
@@ -53,7 +58,7 @@ describe('AppComponent', () => {
   });
 
   it('should call authService.checkAuthentication on init', () => {
-    expect((component as any).authService.checkAuthentication).toHaveBeenCalled();
+    expect(component['authService'].checkAuthentication).toHaveBeenCalled();
   });
 
   it('should update usuarioNombre from currentUser$', () => {
