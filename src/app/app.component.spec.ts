@@ -4,11 +4,11 @@ import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
 import { BcLoadingService } from './services/loading.service';
 import { of } from 'rxjs';
+import { importProvidersFrom } from '@angular/core';
+import { provideRouter } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { CommonModule } from '@angular/common';
-import { BcLoadingComponent } from './components/bc-loading/bc-loading.component';
 
-// ✅ Mocks
+// Mocks
 class MockAuthService {
   currentUser$ = of({ name: 'Usuario Prueba' });
   checkAuthentication = jasmine.createSpy('checkAuthentication');
@@ -30,14 +30,9 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      // 👇 Standalone component
-      imports: [
-        AppComponent,
-        RouterTestingModule.withRoutes([]),
-        CommonModule,
-        BcLoadingComponent
-      ],
+      imports: [AppComponent],
       providers: [
+        importProvidersFrom(RouterTestingModule.withRoutes([])), // 👈 FUNDAMENTAL
         { provide: AuthService, useClass: MockAuthService },
         { provide: Router, useClass: MockRouter },
         { provide: BcLoadingService, useClass: MockBcLoadingService },
