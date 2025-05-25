@@ -67,6 +67,9 @@ export class BcLoadingComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    if (this.subscription && typeof this.subscription.unsubscribe === 'function') {
+      this.subscription.unsubscribe();
+    }
   }
+
 }

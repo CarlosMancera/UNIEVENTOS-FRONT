@@ -1,6 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { BcLoadingComponent } from './bc-loading.component';
+import { BcLoadingService } from '../../services/loading.service';
+import { of } from 'rxjs';
+
+// ✅ Mock del servicio
+class MockBcLoadingService {
+  loading = of({ action: 'show', text: 'Cargando...' });
+}
 
 describe('BcLoadingComponent', () => {
   let component: BcLoadingComponent;
@@ -8,9 +14,11 @@ describe('BcLoadingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BcLoadingComponent]
-    })
-    .compileComponents();
+      imports: [BcLoadingComponent],
+      providers: [
+        { provide: BcLoadingService, useClass: MockBcLoadingService }
+      ]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(BcLoadingComponent);
     component = fixture.componentInstance;

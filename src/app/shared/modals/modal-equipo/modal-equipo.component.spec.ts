@@ -23,6 +23,7 @@ class MockImagenService {
 class MockBcLoadingService {
   show = jasmine.createSpy();
   close = jasmine.createSpy();
+
 }
 
 describe('ModalEquipoComponent', () => {

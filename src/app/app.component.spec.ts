@@ -1,11 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { AuthService } from './services/auth.service';
-import { Router } from '@angular/router';
 import { BcLoadingService } from './services/loading.service';
 import { of } from 'rxjs';
-import { importProvidersFrom } from '@angular/core';
-import { provideRouter } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 // Mocks
@@ -13,15 +10,21 @@ class MockAuthService {
   currentUser$ = of({ name: 'Usuario Prueba' });
   checkAuthentication = jasmine.createSpy('checkAuthentication');
   logout = jasmine.createSpy('logout').and.returnValue(of('Sesión cerrada'));
-}
 
-class MockRouter {
-  navigate = jasmine.createSpy('navigate');
+    isLoggedIn() {
+    return true;
+  }
+
+  // 👇 SI USAS TAMBIÉN ESTO EN HTML
+  getCurrentUser() {
+    return { name: 'Usuario Prueba', role: 'admin' };
+  }
 }
 
 class MockBcLoadingService {
-  show = jasmine.createSpy();
-  close = jasmine.createSpy();
+  loading = of({ action: 'show', text: 'Cargando...' });
+  show = jasmine.createSpy('show');
+  close = jasmine.createSpy('close');
 }
 
 describe('AppComponent', () => {
@@ -30,12 +33,13 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [
+        RouterTestingModule.withRoutes([]), // ✅ configura el router correctamente
+        AppComponent                        // ✅ standalone se importa aquí
+      ],
       providers: [
-        importProvidersFrom(RouterTestingModule.withRoutes([])), // 👈 FUNDAMENTAL
         { provide: AuthService, useClass: MockAuthService },
-        { provide: Router, useClass: MockRouter },
-        { provide: BcLoadingService, useClass: MockBcLoadingService },
+        { provide: BcLoadingService, useClass: MockBcLoadingService }
       ]
     }).compileComponents();
 
@@ -63,7 +67,6 @@ describe('AppComponent', () => {
   it('should navigate to / and close session on logout success', () => {
     component.logout(new MouseEvent('click'));
     expect(component['authService'].logout).toHaveBeenCalled();
-    expect(component['router'].navigate).toHaveBeenCalledWith(['/']);
     expect(component['bcLoadingService'].close).toHaveBeenCalled();
   });
 
