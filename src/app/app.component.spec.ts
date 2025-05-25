@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
 import { AuthService } from './services/auth.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { BcLoadingService } from './services/loading.service';
 import { of } from 'rxjs';
+import { RouterTestingModule } from '@angular/router/testing';
 
 // Mocks
 class MockAuthService {
@@ -27,13 +28,11 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent],
+      imports: [AppComponent, RouterTestingModule], // <- CORRECCIÓN CLAVE
       providers: [
         { provide: AuthService, useClass: MockAuthService },
         { provide: Router, useClass: MockRouter },
         { provide: BcLoadingService, useClass: MockBcLoadingService },
-        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: () => null } } } }
-
       ]
     }).compileComponents();
 
