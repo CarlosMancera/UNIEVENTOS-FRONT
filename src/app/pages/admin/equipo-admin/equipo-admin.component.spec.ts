@@ -7,6 +7,7 @@ import { BcLoadingService } from '../../../services/loading.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
+import { ModalEquipoComponent } from '../../../shared/modals/modal-equipo/modal-equipo.component';
 
 // 👉 Mocks
 class MockTeamService {
@@ -18,13 +19,14 @@ class MockDialogRef {
   close = jasmine.createSpy();
 }
 
+import { fakeAsync, tick } from '@angular/core/testing';
+
 class MockMatDialog {
-  open() {
-    return {
-      afterClosed: () => of({ nombre: 'nuevo equipo' }) // 🧠 simula creación válida
-    };
-  }
+  open = jasmine.createSpy().and.returnValue({
+    afterClosed: () => of(true)
+  });
 }
+
 
 class MockMatSnackBar {
   open = jasmine.createSpy('open');
@@ -45,6 +47,7 @@ describe('EquipoAdminComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         EquipoAdminComponent,
+        ModalEquipoComponent,
         HttpClientTestingModule,
         BrowserAnimationsModule
       ],
@@ -71,34 +74,30 @@ describe('EquipoAdminComponent', () => {
     expect(teamService.listar).toHaveBeenCalled();
   });
 
-  it('should call cargarEquipos and show snackbar after modal closes', (done) => {
-    const cargarSpy = spyOn(component as any, 'cargarEquipos');
-    component.abrirModal();
-    // Esperar ciclo de vida de `afterClosed()`
-    setTimeout(() => {
-      expect(cargarSpy).toHaveBeenCalled();
-      expect(snackBar.open).toHaveBeenCalledWith(
-        'Equipo guardado correctamente',
-        'Cerrar',
-        { duration: 3000 }
-      );
-      done();
-    });
-  });
+it('should call cargarEquipos and show snackbar after modal closes', fakeAsync(() => {
+  const cargarSpy = spyOn(component as any, 'cargarEquipos');
+  component.abrirModal();
+  tick(); // ✅ avanza el tiempo para resolver afterClosed()
+  expect(cargarSpy).toHaveBeenCalled();
+  expect(snackBar.open).toHaveBeenCalledWith(
+    'Equipo guardado correctamente',
+    'Cerrar',
+    { duration: 3000 }
+  );
+}));
 
-  it('should call eliminar, recargar y mostrar snackbar', (done) => {
-    const cargarSpy = spyOn(component as any, 'cargarEquipos');
-    component.eliminar(1);
-    // Espera a que el observable de `eliminar` se complete
-    setTimeout(() => {
-      expect(teamService.eliminar).toHaveBeenCalledWith(1);
-      expect(snackBar.open).toHaveBeenCalledWith(
-        'Equipo eliminado',
-        'Cerrar',
-        { duration: 3000 }
-      );
-      expect(cargarSpy).toHaveBeenCalled();
-      done();
-    });
-  });
+
+it('should call eliminar, recargar y mostrar snackbar', fakeAsync(() => {
+  const cargarSpy = spyOn(component as any, 'cargarEquipos');
+  component.eliminar(1);
+  tick(); // ✅ espera la ejecución del observable
+  expect(teamService.eliminar).toHaveBeenCalledWith(1);
+  expect(snackBar.open).toHaveBeenCalledWith(
+    'Equipo eliminado',
+    'Cerrar',
+    { duration: 3000 }
+  );
+  expect(cargarSpy).toHaveBeenCalled();
+}));
+
 });
