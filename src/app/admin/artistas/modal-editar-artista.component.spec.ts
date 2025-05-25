@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ModalEditarArtistaComponent } from './modal-editar-artista.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ModalEditarArtistaComponent', () => {
   let component: ModalEditarArtistaComponent;
@@ -8,7 +9,10 @@ describe('ModalEditarArtistaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ModalEditarArtistaComponent],
+      imports: [
+        ModalEditarArtistaComponent,
+        NoopAnimationsModule  // ✅ Soluciona NG05105 (animaciones)
+      ],
       providers: [
         { provide: MatDialogRef, useValue: { close: jasmine.createSpy('close') } },
         { provide: MAT_DIALOG_DATA, useValue: { nombre: 'Nombre prueba', genero: 'Pop' } }

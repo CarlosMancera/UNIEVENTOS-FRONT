@@ -7,32 +7,31 @@ import { BcLoadingService } from '../../../services/loading.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
-import { Team } from '../../../models/team.model';
-
-// Mocks
-class MockTeamService {
-  listar = jasmine.createSpy().and.returnValue(of([]));
-  eliminar = jasmine.createSpy().and.returnValue(of(null));
-}
-
-class MockMatDialog {
-  open = jasmine.createSpy().and.returnValue({
-    afterClosed: () => of(true)
-  });
-}
-
-class MockMatSnackBar {
-  open = jasmine.createSpy();
-}
-
-class MockBcLoadingService {
-  show = jasmine.createSpy();
-  close = jasmine.createSpy();
-}
 
 describe('EquipoAdminComponent', () => {
   let component: EquipoAdminComponent;
   let fixture: ComponentFixture<EquipoAdminComponent>;
+
+  // Mocks actualizados
+  const teamServiceMock = {
+    listar: jasmine.createSpy().and.returnValue(of([])),
+    eliminar: jasmine.createSpy().and.returnValue(of(null))
+  };
+
+  const dialogMock = {
+    open: jasmine.createSpy().and.returnValue({
+      afterClosed: () => of(true)
+    })
+  };
+
+  const snackBarMock = {
+    open: jasmine.createSpy()
+  };
+
+  const loadingServiceMock = {
+    show: jasmine.createSpy(),
+    close: jasmine.createSpy()
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -42,10 +41,10 @@ describe('EquipoAdminComponent', () => {
         BrowserAnimationsModule
       ],
       providers: [
-        { provide: TeamService, useClass: MockTeamService },
-        { provide: MatDialog, useClass: MockMatDialog },
-        { provide: MatSnackBar, useClass: MockMatSnackBar },
-        { provide: BcLoadingService, useClass: MockBcLoadingService }
+        { provide: TeamService, useValue: teamServiceMock },
+        { provide: MatDialog, useValue: dialogMock },
+        { provide: MatSnackBar, useValue: snackBarMock },
+        { provide: BcLoadingService, useValue: loadingServiceMock }
       ]
     }).compileComponents();
 
@@ -59,24 +58,24 @@ describe('EquipoAdminComponent', () => {
   });
 
   it('should call teamService.listar on init', () => {
-    expect(component['teamService'].listar).toHaveBeenCalled();
+    expect(teamServiceMock.listar).toHaveBeenCalled();
   });
 
   it('should call cargarEquipos and show snackbar after modal closes', () => {
-    const spy = spyOn(component, 'cargarEquipos');
+    const cargarSpy = spyOn(component as any, 'cargarEquipos');
     component.abrirModal();
-    expect(component['dialog'].open).toHaveBeenCalled();
-    expect(spy).toHaveBeenCalled();
-    expect(component['snackBar'].open).toHaveBeenCalledWith('Equipo guardado correctamente', 'Cerrar', { duration: 3000 });
+    expect(dialogMock.open).toHaveBeenCalled();
+    expect(cargarSpy).toHaveBeenCalled();
+    expect(snackBarMock.open).toHaveBeenCalledWith('Equipo guardado correctamente', 'Cerrar', { duration: 3000 });
   });
 
   it('should call eliminar, recargar y mostrar snackbar', () => {
-    const spy = spyOn(component, 'cargarEquipos');
+    const cargarSpy = spyOn(component as any, 'cargarEquipos');
     component.eliminar(1);
-    expect(component['teamService'].eliminar).toHaveBeenCalledWith(1);
-    expect(component['bcLoadingService'].show).toHaveBeenCalledWith('Cargando datos...');
-    expect(component['bcLoadingService'].close).toHaveBeenCalled();
-    expect(component['snackBar'].open).toHaveBeenCalledWith('Equipo eliminado', 'Cerrar', { duration: 3000 });
-    expect(spy).toHaveBeenCalled();
+    expect(teamServiceMock.eliminar).toHaveBeenCalledWith(1);
+    expect(loadingServiceMock.show).toHaveBeenCalledWith('Cargando datos...');
+    expect(loadingServiceMock.close).toHaveBeenCalled();
+    expect(snackBarMock.open).toHaveBeenCalledWith('Equipo eliminado', 'Cerrar', { duration: 3000 });
+    expect(cargarSpy).toHaveBeenCalled();
   });
 });
