@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="Mocha Tests" time="23.800" tests="1" failures="0">
-  <testsuite name="Root Suite" timestamp="2025-05-26T00:40:59" tests="0" file="cypress\e2e\login.cy.ts" time="0.000" failures="0">
+<testsuites name="Mocha Tests" time="7.957" tests="1" failures="0">
+  <testsuite name="Root Suite" timestamp="2025-05-26T16:48:13" tests="0" file="cypress\e2e\login.cy.ts" time="0.000" failures="0">
   </testsuite>
-  <testsuite name="C101 - Login exitoso" timestamp="2025-05-26T00:40:59" tests="1" time="23.796" failures="0">
-    <testcase name="C101 - Login exitoso C101_should_login_successfully" time="23.583" classname="C101_should_login_successfully">
+  <testsuite name="C1 - Login exitoso" timestamp="2025-05-26T16:48:13" tests="1" time="7.956" failures="0">
+    <testcase name="C1 - Login exitoso C1_should_login_successfully_and_logout" time="7.911" classname="C1_should_login_successfully_and_logout">
     </testcase>
   </testsuite>
 </testsuites>
