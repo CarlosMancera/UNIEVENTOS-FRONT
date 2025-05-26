@@ -9,6 +9,8 @@ import { TokenService } from '../../services/token.service';
 import { ForgotPasswordDialogComponent } from '../shared/forgot-password-dialog/forgot-password-dialog.component';
 import Swal from 'sweetalert2';
 import { BcLoadingService } from '../../services/loading.service';
+import { environment } from '../../../environments/environment.test';
+
 
 @Component({
   selector: 'app-login',
@@ -34,6 +36,11 @@ export class LoginComponent {
   ) {}
 
   ngAfterViewInit(): void {
+    if (!environment.enableCaptcha) {
+      this.recaptchaRendered = true;
+      return;
+    }
+
     const interval = setInterval(() => {
       if ((window as any).grecaptcha && !this.recaptchaRendered) {
         (window as any).grecaptcha.render('recaptcha-container', {
@@ -44,7 +51,6 @@ export class LoginComponent {
       }
     }, 300);
   }
-
   onSubmit() {
     const recaptchaToken = this.getRecaptchaToken();
 
@@ -146,6 +152,7 @@ export class LoginComponent {
   }
 
   getRecaptchaToken(): string | null {
+    if (!environment.enableCaptcha) return 'fake-token';
     const token = (window as any).grecaptcha?.getResponse();
     return token && token.length > 0 ? token : null;
   }
