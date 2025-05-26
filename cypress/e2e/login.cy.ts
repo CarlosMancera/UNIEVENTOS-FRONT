@@ -1,5 +1,5 @@
-describe('C101 - Login exitoso', () => {
-  it('C101_should_login_successfully', () => {
+describe('C2 - Login exitoso', () => {
+  it('C2_should_login_successfully', () => {
     cy.visit('/login');
 
     cy.get('input[name="email"]').type('ndortizp@uqvirtual.edu.co');
