@@ -24,11 +24,10 @@ for var, value in required_vars.items():
     if not value:
         raise Exception(f"❌ Falta la variable de entorno requerida: {var}")
 
-# ✅ IMPORTANTE: usar email=... en lugar de username=
+# Inicializar conexión
 api = TestRailAPI(URL, email=EMAIL, password=API_KEY)
 
-# Crear nueva ejecución de prueba (Test Run)
-# Crear nueva ejecución de prueba (Test Run)
+# Crear Test Run
 run_name = f"CI - Cypress Run {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
 run = api.runs.add_run(
     project_id=PROJECT_ID,
@@ -40,23 +39,30 @@ run = api.runs.add_run(
 )
 run_id = run['id']
 
-# Leer resultados del archivo XML
+# Obtener todos los case_id válidos del test run (para validar)
+tests_in_run = api.tests.get_tests(run_id)
+valid_case_ids = [test['case_id'] for test in tests_in_run]
+
+# Leer resultados del XML generado por Cypress
 tree = ET.parse('cypress/results/cypress-report.xml')
 root = tree.getroot()
 
-# Procesar resultados por test case
+# Reportar resultados
 reported_cases = 0
 for testsuite in root.findall('testsuite'):
     for testcase in testsuite.findall('testcase'):
         name = testcase.get('name')
-
         match = re.search(r'C(\d+)', name)
         if not match:
             continue
 
         case_id = int(match.group(1))
-        status_id = 1  # Passed
 
+        if case_id not in valid_case_ids:
+            print(f"⚠️ El case_id {case_id} no está incluido en el Test Run. Saltando...")
+            continue
+
+        status_id = 1  # Passed
         if testcase.find('failure') is not None:
             status_id = 5  # Failed
 
