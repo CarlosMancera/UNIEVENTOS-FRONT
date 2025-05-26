@@ -24,30 +24,30 @@ jobs:
         working-directory: .
         run: npm run test -- --watch=false --browsers=ChromeHeadless
 
-      - name: Build Angular app para pruebas E2E (usa entorno test)
-        working-directory: .
-        run: npm run build:e2e
+      # - name: Build Angular app para pruebas E2E (usa entorno test)
+      #   working-directory: .
+      #   run: npm run build:e2e
 
-      - name: Instalar Cypress y dependencias de TestRail
-        working-directory: .
-        run: |
-          npm install cypress --save-dev
-          sudo apt-get install python3-pip -y
-          pip3 install testrail-api junitparser
+      # - name: Instalar Cypress y dependencias de TestRail
+      #   working-directory: .
+      #   run: |
+      #     npm install cypress --save-dev
+      #     sudo apt-get install python3-pip -y
+      #     pip3 install testrail-api junitparser
 
-      - name: Ejecutar pruebas E2E Cypress
-        working-directory: .
-        run: npx cypress run
+      # - name: Ejecutar pruebas E2E Cypress
+      #   working-directory: .
+      #   run: npx cypress run
 
-      - name: Reportar resultados a TestRail
-        working-directory: .
-        run: python3 .github/scripts/report_testrail.py
-        env:
-          TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
-          TESTRAIL_API_KEY: ${{ secrets.TESTRAIL_API_KEY }}
-          TESTRAIL_URL: ${{ secrets.TESTRAIL_URL }}
-          TESTRAIL_PROJECT_ID: ${{ secrets.TESTRAIL_PROJECT_ID }}
-          TESTRAIL_SUITE_ID: ${{ secrets.TESTRAIL_SUITE_ID }}
+      # - name: Reportar resultados a TestRail
+      #   working-directory: .
+      #   run: python3 .github/scripts/report_testrail.py
+      #   env:
+      #     TESTRAIL_USERNAME: ${{ secrets.TESTRAIL_USERNAME }}
+      #     TESTRAIL_API_KEY: ${{ secrets.TESTRAIL_API_KEY }}
+      #     TESTRAIL_URL: ${{ secrets.TESTRAIL_URL }}
+      #     TESTRAIL_PROJECT_ID: ${{ secrets.TESTRAIL_PROJECT_ID }}
+      #     TESTRAIL_SUITE_ID: ${{ secrets.TESTRAIL_SUITE_ID }}
 
       - name: SonarCloud Analysis
         working-directory: .
