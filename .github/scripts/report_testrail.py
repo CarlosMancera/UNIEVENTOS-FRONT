@@ -41,7 +41,8 @@ run_id = run['id']
 
 # Obtener todos los case_id válidos del test run (para validar)
 tests_in_run = api.tests.get_tests(run_id)
-valid_case_ids = [test['case_id'] for test in tests_in_run]
+valid_case_ids = [test['case_id'] for test in tests_in_run['tests']]
+print("📦 tests_in_run =", tests_in_run)
 
 # Leer resultados del XML generado por Cypress
 tree = ET.parse('cypress/results/cypress-report.xml')
