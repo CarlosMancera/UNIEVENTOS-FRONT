@@ -28,12 +28,17 @@ for var, value in required_vars.items():
 api = TestRailAPI(URL, email=EMAIL, password=API_KEY)
 
 # Crear nueva ejecución de prueba (Test Run)
+# Crear nueva ejecución de prueba (Test Run)
 run_name = f"CI - Cypress Run {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-run = api.runs.add_run(PROJECT_ID, {
-    "suite_id": SUITE_ID,
-    "name": run_name,
-    "include_all": True
-})
+run = api.runs.add_run(
+    project_id=PROJECT_ID,
+    data={
+        "suite_id": SUITE_ID,
+        "name": run_name,
+        "include_all": True
+    }
+)
+
 run_id = run['id']
 
 # Leer resultados del archivo XML
