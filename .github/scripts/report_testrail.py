@@ -38,7 +38,6 @@ run = api.runs.add_run(
         "include_all": True
     }
 )
-
 run_id = run['id']
 
 # Leer resultados del archivo XML
