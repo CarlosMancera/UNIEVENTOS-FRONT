@@ -70,11 +70,10 @@ for testsuite in root.findall('testsuite'):
         api.results.add_result_for_case(
             run_id=run_id,
             case_id=case_id,
-            data={
-                "status_id": status_id,
-                "comment": f"Resultado desde Cypress para {name}"
-            }
+            status_id=status_id,
+            comment=f"Resultado desde Cypress para {name}"
         )
+
         reported_cases += 1
 
 print(f"✔️ {reported_cases} resultados reportados correctamente al Test Run ID: {run_id}")
